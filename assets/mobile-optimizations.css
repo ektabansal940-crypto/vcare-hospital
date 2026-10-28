@@ -1,0 +1,1509 @@
+/* =============================================================
+   HERO BANNER DESKTOP TILING FIX
+   When desktop view is minimized/zoomed out or on ultrawide displays,
+   prevent the background banner from repeating horizontally.
+   ============================================================= */
+.elementor-element.elementor-element-55cd5b1,
+.elementor-871 .elementor-element.elementor-element-55cd5b1,
+.elementor-871 .elementor-element.elementor-element-55cd5b1:not(.elementor-motion-effects-element-type-background),
+.elementor-871 .elementor-element.elementor-element-55cd5b1 > .elementor-motion-effects-container > .elementor-motion-effects-layer {
+  background-repeat: no-repeat !important;
+  background-position: center top !important;
+  background-size: contain !important;
+}
+
+
+/* =============================================================
+   MOBILE-ONLY OPTIMIZATIONS (@media max-width: 767px)
+   Strictly applies only on mobile screens.
+   Desktop and tablet views are 100% untouched.
+   ============================================================= */
+@media (max-width: 767px) {
+  /* -----------------------------------------------------------
+     1. GLOBAL BOX-SIZING & VIEWPORT OVERFLOW PREVENTION
+     ----------------------------------------------------------- */
+  *, *::before, *::after {
+    box-sizing: border-box !important;
+  }
+
+  html, body {
+    overflow-x: hidden !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    position: relative !important;
+  }
+
+  /* Prevent entrance animations from translating off-screen on mobile */
+  .elementor-invisible,
+  .animated,
+  .elementor-animated,
+  [class*="elementor-animation-"],
+  [data-settings*="animation"] {
+    visibility: visible !important;
+    opacity: 1 !important;
+    transform: none !important;
+    -webkit-transform: none !important;
+    animation: none !important;
+    -webkit-animation: none !important;
+    transition: none !important;
+  }
+
+  /* Prevent sliders from overflowing horizontal viewport */
+  .wpr-testimonial-carousel-wrap,
+  .wpr-testimonial-carousel,
+  .slick-slider,
+  .slick-list {
+    overflow: hidden !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  /* -----------------------------------------------------------
+     2. UNIFORM SECTION PADDING & SYMMETRICAL MARGINS ACROSS ALL PAGES
+     Horizontal padding: strictly 20px left, 20px right
+     Vertical padding: strictly 25px top, 25px bottom
+     ----------------------------------------------------------- */
+  .elementor-section.elementor-top-section,
+  .e-con.e-parent {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    padding-top: 25px !important;
+    padding-bottom: 25px !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    --padding-left: 20px !important;
+    --padding-right: 20px !important;
+    --padding-top: 25px !important;
+    --padding-bottom: 25px !important;
+    --margin-left: 0px !important;
+    --margin-right: 0px !important;
+    --margin-top: 0px !important;
+    --margin-bottom: 0px !important;
+  }
+
+  /* Containers inside sections span 100% with no redundant extra margin/padding */
+  .elementor-section.elementor-top-section > .elementor-container,
+  .elementor-section.elementor-section-boxed > .elementor-container,
+  .e-con.e-parent > .e-con-inner {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  /* All mobile columns stack full width by default */
+  .elementor-section.elementor-top-section .elementor-column,
+  .elementor-column.elementor-col-100,
+  .elementor-column.elementor-col-50,
+  .elementor-column.elementor-col-33,
+  .elementor-column.elementor-col-25 {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .elementor-widget-wrap,
+  .elementor-element-populated {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* -----------------------------------------------------------
+     3. HEADER, TOP-BAR & HERO
+     ----------------------------------------------------------- */
+  /* Top info bar */
+  .elementor-element.elementor-element-1fc2745 {
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  /* Mobile header navigation bar */
+  .elementor-element.elementor-element-5775238,
+  .elementor-section.elementor-element-5775238 {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    position: relative !important;
+    z-index: 1000 !important;
+  }
+
+  .elementor-section.elementor-element-5775238 > .elementor-container {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    min-height: unset !important;
+    position: static !important;
+  }
+
+  /* Logo column */
+  .elementor-section.elementor-element-5775238 .elementor-column.elementor-element-46c0c6b {
+    width: auto !important;
+    max-width: 70% !important;
+    flex: 0 0 auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  .elementor-section.elementor-element-5775238 .elementor-element-46c0c6b > .elementor-element-populated,
+  .elementor-section.elementor-element-5775238 .elementor-element-46c0c6b .elementor-widget-wrap {
+    padding: 0 !important;
+    margin: 0 !important;
+    width: auto !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  .elementor-section.elementor-element-5775238 .elementor-element-705938f {
+    width: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .elementor-section.elementor-element-5775238 .elementor-element-705938f .wpr-logo {
+    display: flex !important;
+    align-items: center !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .elementor-section.elementor-element-5775238 .elementor-element-705938f .wpr-logo-image {
+    max-width: 135px !important;
+    display: block !important;
+  }
+
+  .elementor-section.elementor-element-5775238 .elementor-element-705938f .wpr-logo-image img {
+    max-height: 46px !important;
+    width: auto !important;
+    display: block !important;
+  }
+
+  /* Hamburger menu column */
+  .elementor-section.elementor-element-5775238 .elementor-column.elementor-element-4e4509b {
+    width: auto !important;
+    flex: 0 0 auto !important;
+    padding: 0 !important;
+    margin: 0 0 0 auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    position: static !important;
+  }
+
+  .elementor-section.elementor-element-5775238 .elementor-element-4e4509b > .elementor-element-populated,
+  .elementor-section.elementor-element-5775238 .elementor-element-4e4509b .elementor-widget-wrap {
+    padding: 0 !important;
+    margin: 0 !important;
+    width: auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    position: static !important;
+  }
+
+  .elementor-section.elementor-element-5775238 .elementor-element-d29d71d {
+    padding: 0 !important;
+    margin: 0 !important;
+    width: auto !important;
+    position: static !important;
+  }
+
+  .elementor-section.elementor-element-5775238 .wpr-mobile-toggle-wrap {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: auto !important;
+    cursor: pointer !important;
+  }
+
+  .elementor-section.elementor-element-5775238 .wpr-mobile-toggle {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 38px !important;
+    height: 38px !important;
+    padding: 6px !important;
+    margin: 0 !important;
+    cursor: pointer !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 6px !important;
+    background: #ffffff !important;
+    box-sizing: border-box !important;
+    transition: all 0.25s ease !important;
+  }
+
+  .elementor-section.elementor-element-5775238 .wpr-mobile-toggle:hover,
+  .elementor-section.elementor-element-5775238 .wpr-mobile-toggle.wpr-toggle-active {
+    border-color: #53B298 !important;
+    background: #f0fdf9 !important;
+  }
+
+  .elementor-section.elementor-element-5775238 .wpr-mobile-toggle-line {
+    display: block !important;
+    width: 20px !important;
+    height: 2.5px !important;
+    background-color: #2b3940 !important;
+    border-radius: 2px !important;
+    margin: 2px 0 !important;
+    transition: all 0.25s ease !important;
+  }
+
+  .elementor-section.elementor-element-5775238 .wpr-mobile-toggle:hover .wpr-mobile-toggle-line,
+  .elementor-section.elementor-element-5775238 .wpr-mobile-toggle.wpr-toggle-active .wpr-mobile-toggle-line {
+    background-color: #53B298 !important;
+  }
+
+  /* Dropdown Navigation Menu */
+  .elementor-section.elementor-element-5775238 .wpr-mobile-nav-menu-container {
+    position: static !important;
+  }
+
+  .elementor-section.elementor-element-5775238 .wpr-mobile-nav-menu {
+    position: absolute !important;
+    top: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    background-color: #ffffff !important;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15) !important;
+    border-top: 1px solid #eef0f2 !important;
+    z-index: 99999 !important;
+    list-style: none !important;
+    padding: 8px 0 !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+    height: auto !important;
+  }
+
+  .elementor-section.elementor-element-5775238 .wpr-mobile-nav-menu:not(.wpr-menu-open) {
+    display: none !important;
+  }
+
+  .elementor-section.elementor-element-5775238 .wpr-mobile-nav-menu.wpr-menu-open {
+    display: block !important;
+  }
+
+  .elementor-section.elementor-element-5775238 .wpr-mobile-nav-menu li {
+    display: block !important;
+    width: 100% !important;
+    background-color: #ffffff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-bottom: 1px solid #f1f3f5 !important;
+    box-sizing: border-box !important;
+    text-align: left !important;
+  }
+
+  .elementor-section.elementor-element-5775238 .wpr-mobile-nav-menu li:last-child {
+    border-bottom: none !important;
+  }
+
+  .elementor-section.elementor-element-5775238 .wpr-mobile-nav-menu li a {
+    display: block !important;
+    padding: 13px 20px !important;
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    color: #2b3940 !important;
+    text-decoration: none !important;
+    text-align: left !important;
+    white-space: nowrap !important;
+    box-sizing: border-box !important;
+    transition: background-color 0.2s ease, color 0.2s ease !important;
+  }
+
+  .elementor-section.elementor-element-5775238 .wpr-mobile-nav-menu li a:hover,
+  .elementor-section.elementor-element-5775238 .wpr-mobile-nav-menu li a:active,
+  .elementor-section.elementor-element-5775238 .wpr-mobile-nav-menu li.current_page_item > a,
+  .elementor-section.elementor-element-5775238 .wpr-mobile-nav-menu li a.wpr-active-menu-item {
+    background-color: #eaf6f2 !important;
+    color: #53B298 !important;
+    font-weight: 600 !important;
+  }
+
+  .elementor-section.elementor-element-5775238 .wpr-mobile-nav-menu li a:hover,
+  .elementor-section.elementor-element-5775238 .wpr-mobile-nav-menu li a:active,
+  .elementor-section.elementor-element-5775238 .wpr-mobile-nav-menu li.current_page_item > a,
+  .elementor-section.elementor-element-5775238 .wpr-mobile-nav-menu li a.wpr-active-menu-item {
+    background-color: #eaf6f2 !important;
+    color: #53B298 !important;
+    font-weight: 600 !important;
+  }
+
+  /* -----------------------------------------------------------
+     3. HERO BANNER
+     ----------------------------------------------------------- */
+  .elementor-element.elementor-element-55cd5b1,
+  .elementor-871 .elementor-element.elementor-element-55cd5b1,
+  .elementor-871 .elementor-element.elementor-element-55cd5b1:not(.elementor-motion-effects-element-type-background) {
+    background-image: url("https://vcaremultispecialityhospital.in/wp-content/uploads/2026/05/ChatGPT-Image-May-23-2026-03_37_26-PM.png") !important;
+    background-repeat: no-repeat !important;
+    background-position: center top !important;
+    background-size: contain !important;
+    width: 100% !important;
+    aspect-ratio: 1536 / 1024 !important;
+    min-height: unset !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* -----------------------------------------------------------
+     4. WELCOME SECTION (Homepage Section 4)
+     ----------------------------------------------------------- */
+  .elementor-element.elementor-element-636000e {
+    padding-top: 25px !important;
+    padding-bottom: 25px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    margin: 0 !important;
+  }
+
+  .elementor-element.elementor-element-05ba9dd {
+    text-align: left !important;
+    margin: 0 0 16px 0 !important;
+    padding: 0 !important;
+  }
+
+  .elementor-element.elementor-element-05ba9dd .elementor-heading-title {
+    text-align: left !important;
+    font-size: 26px !important;
+    line-height: 1.35 !important;
+    font-weight: 700 !important;
+    color: #222222 !important;
+    margin: 0 !important;
+  }
+
+  .elementor-element.elementor-element-67fb024 {
+    text-align: left !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .elementor-element.elementor-element-67fb024 p {
+    text-align: left !important;
+    font-size: 15px !important;
+    line-height: 1.65 !important;
+    margin: 0 0 16px 0 !important;
+    color: #555555 !important;
+  }
+
+  .elementor-element.elementor-element-67fb024 a {
+    color: #317c67 !important;
+    font-weight: 500 !important;
+    text-decoration: underline !important;
+  }
+
+  .elementor-element.elementor-element-c18807c {
+    text-align: left !important;
+    margin: 20px 0 10px 0 !important;
+    padding: 0 !important;
+  }
+
+  .elementor-element.elementor-element-c18807c .wpr-button-wrap {
+    text-align: left !important;
+    margin: 0 !important;
+    display: inline-block !important;
+  }
+
+  .elementor-element.elementor-element-c18807c .wpr-button {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 12px 28px !important;
+    border-radius: 4px !important;
+  }
+
+  /* -----------------------------------------------------------
+     5. "WHY CHOOSE VCARE" SECTION (Homepage Section 5 & 6)
+     Fix all clipping, alignment, and spacing of the 6 feature items
+     ----------------------------------------------------------- */
+  .elementor-element.elementor-element-e3052b2 {
+    padding-top: 25px !important;
+    padding-bottom: 10px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    margin: 0 !important;
+  }
+
+  .elementor-element.elementor-element-c4eb675 img {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: 280px !important;
+    object-fit: cover !important;
+    border-radius: 10px !important;
+    margin: 0 0 20px 0 !important;
+  }
+
+  .elementor-element.elementor-element-a02fb25 {
+    text-align: left !important;
+    margin: 0 0 14px 0 !important;
+    padding: 0 !important;
+  }
+
+  .elementor-element.elementor-element-a02fb25 .elementor-heading-title {
+    text-align: left !important;
+    font-size: 26px !important;
+    line-height: 1.35 !important;
+    font-weight: 700 !important;
+    color: #222222 !important;
+    margin: 0 !important;
+  }
+
+  .elementor-element.elementor-element-d8c73ce {
+    text-align: left !important;
+    margin: 0 0 16px 0 !important;
+    padding: 0 !important;
+  }
+
+  .elementor-element.elementor-element-d8c73ce p,
+  .elementor-element.elementor-element-d8c73ce {
+    font-size: 15px !important;
+    line-height: 1.6 !important;
+    color: #555555 !important;
+    text-align: left !important;
+  }
+
+  /* Section 6 container and 3 columns */
+  .elementor-element.elementor-element-4c1a585 {
+    padding-top: 10px !important;
+    padding-bottom: 25px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    margin: 0 !important;
+  }
+
+  .elementor-element.elementor-element-a48cf88,
+  .elementor-element.elementor-element-c634fdc,
+  .elementor-element.elementor-element-12e49e2 {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    float: none !important;
+    display: block !important;
+  }
+
+  /* Reset all 6 feature headings and descriptions to equal left alignment and margins */
+  .elementor-element.elementor-element-3034c9d,
+  .elementor-element.elementor-element-5592ffe,
+  .elementor-element.elementor-element-9efb8e1,
+  .elementor-element.elementor-element-ee50aa4,
+  .elementor-element.elementor-element-838fd04,
+  .elementor-element.elementor-element-42f29fa {
+    text-align: left !important;
+    margin: 0 0 6px 0 !important;
+    padding: 0 !important;
+  }
+
+  .elementor-element.elementor-element-8a665e0,
+  .elementor-element.elementor-element-ffbae38,
+  .elementor-element.elementor-element-1344391,
+  .elementor-element.elementor-element-5dfae0e,
+  .elementor-element.elementor-element-dc5e166,
+  .elementor-element.elementor-element-e5a6aa1 {
+    text-align: left !important;
+    margin: 0 0 20px 0 !important;
+    padding: 0 !important;
+  }
+
+  .elementor-element.elementor-element-3034c9d .elementor-heading-title,
+  .elementor-element.elementor-element-5592ffe .elementor-heading-title,
+  .elementor-element.elementor-element-9efb8e1 .elementor-heading-title,
+  .elementor-element.elementor-element-ee50aa4 .elementor-heading-title,
+  .elementor-element.elementor-element-838fd04 .elementor-heading-title,
+  .elementor-element.elementor-element-42f29fa .elementor-heading-title {
+    text-align: left !important;
+    font-size: 19px !important;
+    font-weight: 700 !important;
+    line-height: 1.3 !important;
+    color: #484848 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .elementor-element.elementor-element-8a665e0 p,
+  .elementor-element.elementor-element-ffbae38 p,
+  .elementor-element.elementor-element-1344391 p,
+  .elementor-element.elementor-element-5dfae0e p,
+  .elementor-element.elementor-element-dc5e166 p,
+  .elementor-element.elementor-element-e5a6aa1 p {
+    text-align: left !important;
+    font-size: 14px !important;
+    line-height: 1.55 !important;
+    color: #6E6E6E !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* -----------------------------------------------------------
+     6. "NO MIDDLEMEN JUST HONEST DIAGNOSTICS" (Section 7)
+     ----------------------------------------------------------- */
+  .elementor-element.elementor-element-aade106 {
+    padding-top: 25px !important;
+    padding-bottom: 20px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    margin: 0 !important;
+  }
+
+  .elementor-element.elementor-element-ef46582 img {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    border-radius: 10px !important;
+    margin: 0 0 20px 0 !important;
+  }
+
+  .elementor-element.elementor-element-bd4abf3,
+  .elementor-element.elementor-element-bd4abf3 .elementor-heading-title {
+    text-align: left !important;
+    font-size: 26px !important;
+    line-height: 1.35 !important;
+    font-weight: 700 !important;
+    color: #222222 !important;
+    margin: 0 0 16px 0 !important;
+  }
+
+  .elementor-element.elementor-element-694727b,
+  .elementor-element.elementor-element-694727b p {
+    text-align: left !important;
+    font-size: 15px !important;
+    line-height: 1.65 !important;
+    color: #555555 !important;
+    margin: 0 0 20px 0 !important;
+  }
+
+  .elementor-element.elementor-element-3262591 {
+    text-align: left !important;
+    margin: 0 !important;
+  }
+
+  .elementor-element.elementor-element-3262591 .wpr-button-wrap {
+    text-align: left !important;
+    margin: 0 !important;
+    display: inline-block !important;
+  }
+
+  .elementor-element.elementor-element-3262591 .wpr-button {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 12px 28px !important;
+    border-radius: 4px !important;
+  }
+
+  /* Hide spam/hidden element completely so it creates no empty space */
+  .elementor-element.elementor-element-b935b20 {
+    display: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 0 !important;
+    min-height: 0 !important;
+  }
+
+  /* -----------------------------------------------------------
+     7. "OUR SERVICES" & FLIP BOXES (Section 8, 9, 10)
+     ----------------------------------------------------------- */
+  .elementor-element.elementor-element-259170754 {
+    padding-top: 15px !important;
+    padding-bottom: 0 !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    margin: 0 !important;
+  }
+
+  .elementor-element.elementor-element-5f1c9cbc,
+  .elementor-element.elementor-element-5f1c9cbc .elementor-heading-title {
+    text-align: center !important;
+    font-size: 28px !important;
+    line-height: 1.3 !important;
+    font-weight: 700 !important;
+    color: #222222 !important;
+    margin: 0 0 20px 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Section 9 and 10 container resets */
+  .elementor-element.elementor-element-2e1a5cd {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    margin: 0 !important;
+  }
+
+  .elementor-element.elementor-element-e57f627 {
+    padding-top: 0 !important;
+    padding-bottom: 25px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    margin: 0 !important;
+  }
+
+  .elementor-element.elementor-element-7b9ae4e,
+  .elementor-element.elementor-element-c853ed8 {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Symmetrical, strictly uniform 20px vertical gap between each card */
+  .elementor-element.elementor-element-4af2ec0,
+  .elementor-element.elementor-element-8c4c00d,
+  .elementor-element.elementor-element-aef1607,
+  .elementor-element.elementor-element-e58b392 {
+    margin-top: 0 !important;
+    margin-bottom: 20px !important;
+    padding: 0 !important;
+  }
+
+  .elementor-element.elementor-element-afdb9fb {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding: 0 !important;
+  }
+
+  .elementor-element.elementor-element-41b04ef,
+  .elementor-element.elementor-element-42b93e1,
+  .elementor-element.elementor-element-b7ecc6a,
+  .elementor-element.elementor-element-6a9d86e,
+  .elementor-element.elementor-element-2d898f2 {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .wpr-flip-box,
+  .wpr-flip-box-item,
+  .wpr-flip-box-front,
+  .wpr-flip-box-back,
+  .wpr-flip-box-overlay {
+    border-radius: 12px !important;
+  }
+
+  .wpr-flip-box-front,
+  .wpr-flip-box-back {
+    padding: 24px 20px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* -----------------------------------------------------------
+     8. "MEET DR. AZHAR ALI" & "THE VISION BEHIND VCARE" (Section 11)
+     ----------------------------------------------------------- */
+  .elementor-element.elementor-element-683ee11 {
+    padding-top: 25px !important;
+    padding-bottom: 25px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    margin: 0 !important;
+  }
+
+  .elementor-element.elementor-element-c629743,
+  .elementor-element.elementor-element-c629743 .elementor-heading-title {
+    text-align: left !important;
+    font-size: 26px !important;
+    line-height: 1.35 !important;
+    font-weight: 700 !important;
+    color: #222222 !important;
+    margin: 0 0 20px 0 !important;
+    padding: 0 !important;
+  }
+
+  .elementor-element.elementor-element-f7ddba9 {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .elementor-element.elementor-element-d901b55,
+  .elementor-element.elementor-element-d901b55 > .elementor-element-populated {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+
+  .elementor-element.elementor-element-4af9de6 {
+    margin: 0 0 35px 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .elementor-element.elementor-element-8079161,
+  .elementor-871 .elementor-element.elementor-element-8079161,
+  .elementor-element.elementor-element-8079161 > .elementor-element-populated,
+  .elementor-871 .elementor-element.elementor-element-8079161 > .elementor-element-populated {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    --e-column-margin-top: 0px !important;
+    --e-column-margin-right: 0px !important;
+    --e-column-margin-bottom: 0px !important;
+    --e-column-margin-left: 0px !important;
+  }
+
+  .elementor-element.elementor-element-ced54b3,
+  .elementor-element.elementor-element-ced54b3 .elementor-heading-title {
+    text-align: left !important;
+    font-size: 24px !important;
+    line-height: 1.35 !important;
+    font-weight: 700 !important;
+    color: #222222 !important;
+    margin: 0 0 14px 0 !important;
+    padding: 0 !important;
+  }
+
+  .elementor-element.elementor-element-d9e0952,
+  .elementor-element.elementor-element-d9e0952 p {
+    text-align: left !important;
+    font-size: 15px !important;
+    line-height: 1.65 !important;
+    color: #555555 !important;
+    margin: 0 0 20px 0 !important;
+    padding: 0 !important;
+  }
+
+  .elementor-element.elementor-element-16c62d9 {
+    text-align: left !important;
+    margin: 0 0 10px 0 !important;
+    padding: 0 !important;
+  }
+
+  .elementor-element.elementor-element-16c62d9 .wpr-button-wrap {
+    text-align: left !important;
+    margin: 0 !important;
+    display: inline-block !important;
+  }
+
+  .elementor-element.elementor-element-16c62d9 .wpr-button {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 12px 28px !important;
+    border-radius: 4px !important;
+  }
+
+  /* -----------------------------------------------------------
+     9. "OUR NUMBERS SPEAK" & STATS COUNTERS (Section 12)
+     ----------------------------------------------------------- */
+  .elementor-element.elementor-element-ea1f188 {
+    padding-top: 25px !important;
+    padding-bottom: 10px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    margin: 0 !important;
+  }
+
+  .elementor-element.elementor-element-ea1f188 .elementor-heading-title {
+    text-align: left !important;
+    font-size: 26px !important;
+    line-height: 1.35 !important;
+    font-weight: 700 !important;
+    color: #222222 !important;
+    margin: 0 0 20px 0 !important;
+  }
+
+  .elementor-element.elementor-element-7d0557e {
+    padding-top: 10px !important;
+    padding-bottom: 25px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    margin: 0 !important;
+  }
+
+  .elementor-element.elementor-element-4c6ac69 {
+    border-radius: 12px !important;
+    padding: 20px 10px !important;
+    background-color: #53B298 !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 2x2 grid for counters on mobile */
+  .elementor-element.elementor-element-432b6bb,
+  .elementor-element.elementor-element-54627d7,
+  .elementor-element.elementor-element-70849cc,
+  .elementor-element.elementor-element-593aa45 {
+    width: 50% !important;
+    float: left !important;
+    padding: 12px 6px !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
+  }
+
+  .elementor-element.elementor-element-70849cc,
+  .elementor-element.elementor-element-593aa45 {
+    clear: none !important;
+  }
+
+  .elementor-element.elementor-element-432b6bb .elementor-icon,
+  .elementor-element.elementor-element-54627d7 .elementor-icon,
+  .elementor-element.elementor-element-70849cc .elementor-icon,
+  .elementor-element.elementor-element-593aa45 .elementor-icon {
+    margin: 0 auto 10px auto !important;
+    text-align: center !important;
+  }
+
+  /* -----------------------------------------------------------
+     10. "WHAT OUR PATIENTS SAY" TESTIMONIALS (Section 13)
+     ----------------------------------------------------------- */
+  .elementor-element.elementor-element-061844f {
+    padding-top: 25px !important;
+    padding-bottom: 25px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    margin: 0 !important;
+  }
+
+  .elementor-element.elementor-element-bc0c922,
+  .elementor-element.elementor-element-bc0c922 .elementor-heading-title {
+    text-align: left !important;
+    font-size: 26px !important;
+    line-height: 1.35 !important;
+    font-weight: 700 !important;
+    color: #222222 !important;
+    margin: 0 0 16px 0 !important;
+  }
+
+  .elementor-element.elementor-element-5ce2505 {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+
+  .wpr-testimonial-item {
+    padding: 24px 20px !important;
+    border-radius: 12px !important;
+    text-align: left !important;
+    box-sizing: border-box !important;
+  }
+
+  /* -----------------------------------------------------------
+     11. "FREQUENTLY ASKED QUESTIONS" (Section 14)
+     ----------------------------------------------------------- */
+  .elementor-element.elementor-element-3c8c4653 {
+    padding-top: 25px !important;
+    padding-bottom: 25px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    margin: 0 !important;
+  }
+
+  .elementor-element.elementor-element-6ed5ca3,
+  .elementor-element.elementor-element-6ed5ca3 .elementor-heading-title {
+    text-align: left !important;
+    font-size: 26px !important;
+    line-height: 1.35 !important;
+    font-weight: 700 !important;
+    color: #222222 !important;
+    margin: 0 0 16px 0 !important;
+  }
+
+  .elementor-element.elementor-element-2c1e0e68 {
+    margin: 0 0 20px 0 !important;
+  }
+
+  .elementor-element.elementor-element-13a734d1 {
+    width: 100% !important;
+  }
+
+  .elementor-element.elementor-element-13a734d1 .elementor-tab-title {
+    padding: 16px 18px !important;
+    font-size: 15px !important;
+    text-align: left !important;
+    border-radius: 8px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .elementor-element.elementor-element-13a734d1 .elementor-tab-content {
+    padding: 14px 18px !important;
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+    text-align: left !important;
+  }
+
+  .elementor-element.elementor-element-425e537 {
+    text-align: left !important;
+    margin-top: 15px !important;
+  }
+
+  .elementor-element.elementor-element-425e537 .wpr-button-wrap {
+    text-align: left !important;
+    margin: 0 !important;
+    display: inline-block !important;
+  }
+
+  .elementor-element.elementor-element-425e537 .wpr-button {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 12px 28px !important;
+    border-radius: 4px !important;
+  }
+
+  /* -----------------------------------------------------------
+     12. "VISIT US TODAY" (Flexbox container)
+     ----------------------------------------------------------- */
+  .elementor-element.elementor-element-1c5d464 {
+    padding-top: 25px !important;
+    padding-bottom: 25px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    margin: 20px 0 !important;
+    --padding-top: 25px !important;
+    --padding-bottom: 25px !important;
+    --padding-left: 20px !important;
+    --padding-right: 20px !important;
+    --border-radius: 20px 20px 20px 20px !important;
+    border-radius: 20px !important;
+  }
+
+  .elementor-element.elementor-element-2e949c8 {
+    padding: 25px 20px !important;
+    border-radius: 16px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .elementor-element.elementor-element-4024e62 {
+    text-align: center !important;
+    margin: 0 0 12px 0 !important;
+  }
+
+  .elementor-element.elementor-element-4024e62 .wpr-dual-title {
+    font-size: 26px !important;
+    color: #ffffff !important;
+    text-align: center !important;
+  }
+
+  .elementor-element.elementor-element-7575e93 {
+    text-align: center !important;
+    margin: 0 0 20px 0 !important;
+  }
+
+  .elementor-element.elementor-element-7575e93 p {
+    text-align: center !important;
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+    color: #ffffff !important;
+    margin: 0 !important;
+  }
+
+  .elementor-element.elementor-element-af7850d {
+    display: flex !important;
+    justify-content: center !important;
+    margin: 0 auto !important;
+    text-align: center !important;
+  }
+
+  .elementor-element.elementor-element-af7850d .wpr-button {
+    padding: 12px 32px !important;
+  }
+
+  /* -----------------------------------------------------------
+     13. FOOTER SECTIONS (Section 17 & 18)
+     ----------------------------------------------------------- */
+  .elementor-element.elementor-element-e85a1be {
+    padding-top: 25px !important;
+    padding-bottom: 25px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    margin: 0 !important;
+  }
+
+  .elementor-element.elementor-element-6cbc3e4 {
+    width: 100% !important;
+    margin-bottom: 20px !important;
+    text-align: left !important;
+  }
+
+  .elementor-element.elementor-element-161934c,
+  .elementor-element.elementor-element-7cf6ebd {
+    width: 50% !important;
+    float: left !important;
+    margin-bottom: 20px !important;
+    box-sizing: border-box !important;
+  }
+
+  .elementor-element.elementor-element-4e37182 {
+    width: 100% !important;
+    clear: both !important;
+    margin-top: 10px !important;
+    text-align: left !important;
+  }
+
+  .elementor-element.elementor-element-ecb0a61 {
+    padding-top: 15px !important;
+    padding-bottom: 15px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    margin: 0 !important;
+    text-align: center !important;
+  }
+
+  /* =============================================================
+     15. ABOUT PAGE (.elementor-7 / about.html) MOBILE ALIGNMENT
+     Content outside cards -> text-align: left
+     Content inside cards -> text-align: center
+     ============================================================= */
+
+  /* Section 2: Main About Us Intro (Outside Card -> Left Aligned) */
+  .elementor-7 .elementor-element.elementor-element-91f6c18 {
+    padding-top: 25px !important;
+    padding-bottom: 25px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    margin: 0 !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-06eb135 {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-28198a1 img {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    border-radius: 10px !important;
+    margin: 0 0 20px 0 !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-af8dac8,
+  .elementor-7 .elementor-element.elementor-element-af8dac8 p {
+    text-align: left !important;
+    font-size: 15px !important;
+    line-height: 1.65 !important;
+    color: #555555 !important;
+    margin: 0 0 16px 0 !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-80ce727 {
+    text-align: left !important;
+    margin: 0 0 20px 0 !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-80ce727 .wpr-button-wrap {
+    text-align: left !important;
+    margin: 0 !important;
+    display: inline-block !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-80ce727 .wpr-button {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 12px 28px !important;
+    border-radius: 4px !important;
+  }
+
+  /* Section 3: Meet Dr. Azhar Ali & The Vision Behind Vcare */
+  .elementor-7 .elementor-element.elementor-element-c7ad217 {
+    padding-top: 25px !important;
+    padding-bottom: 25px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    margin: 0 !important;
+  }
+
+  /* Heading outside card -> Left Aligned */
+  .elementor-7 .elementor-element.elementor-element-cef8e34,
+  .elementor-7 .elementor-element.elementor-element-cef8e34 .elementor-heading-title {
+    text-align: left !important;
+    font-size: 26px !important;
+    line-height: 1.35 !important;
+    font-weight: 700 !important;
+    color: #222222 !important;
+    margin: 0 0 20px 0 !important;
+    padding: 0 !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-5729515 {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-3f86793,
+  .elementor-7 .elementor-element.elementor-element-3f86793 > .elementor-element-populated {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+
+  /* Dr. Azhar Ali Card (Inside Card -> Center Aligned) */
+  .elementor-7 .elementor-element.elementor-element-ede775f {
+    margin: 0 0 35px 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-ede775f .wpr-team-member {
+    text-align: center !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-ede775f .wpr-member-content {
+    text-align: center !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-ede775f .wpr-member-name {
+    text-align: center !important;
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    margin-bottom: 4px !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-ede775f .wpr-member-job {
+    text-align: center !important;
+    font-size: 14px !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-ede775f .wpr-member-divider {
+    margin: 10px auto !important;
+  }
+
+  /* "The Vision Behind Vcare" (Outside Card -> Left Aligned) */
+  .elementor-7 .elementor-element.elementor-element-db1be26,
+  .elementor-7 .elementor-element.elementor-element-db1be26 > .elementor-element-populated {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-3f4f987,
+  .elementor-7 .elementor-element.elementor-element-3f4f987 .elementor-heading-title {
+    text-align: left !important;
+    font-size: 24px !important;
+    line-height: 1.35 !important;
+    font-weight: 700 !important;
+    color: #222222 !important;
+    margin: 0 0 14px 0 !important;
+    padding: 0 !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-ea4b488,
+  .elementor-7 .elementor-element.elementor-element-ea4b488 p {
+    text-align: left !important;
+    font-size: 15px !important;
+    line-height: 1.65 !important;
+    color: #555555 !important;
+    margin: 0 0 20px 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Section 4: Diagnostics - No Middlemen (Outside Card -> Left Aligned) */
+  .elementor-7 .elementor-element.elementor-element-4355583 {
+    padding-top: 25px !important;
+    padding-bottom: 25px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    margin: 0 !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-dc431a0 {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-8e36d6b img {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    border-radius: 10px !important;
+    margin: 0 0 20px 0 !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-f6d12c3,
+  .elementor-7 .elementor-element.elementor-element-f6d12c3 .elementor-heading-title {
+    text-align: left !important;
+    font-size: 26px !important;
+    line-height: 1.35 !important;
+    font-weight: 700 !important;
+    color: #222222 !important;
+    margin: 0 0 16px 0 !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-243af9f,
+  .elementor-7 .elementor-element.elementor-element-243af9f p {
+    text-align: left !important;
+    font-size: 15px !important;
+    line-height: 1.65 !important;
+    color: #555555 !important;
+    margin: 0 0 20px 0 !important;
+  }
+
+  /* Section 5: Mission & Vision (Inside Cards -> Center Aligned) */
+  .elementor-7 .elementor-element.elementor-element-7f152b7 {
+    padding-top: 25px !important;
+    padding-bottom: 25px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    margin: 0 !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-d56370c,
+  .elementor-7 .elementor-element.elementor-element-d67f502,
+  .elementor-7 .elementor-element.elementor-element-3c377e7 {
+    width: 100% !important;
+    margin: 0 0 20px 0 !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-d56370c .wpr-promo-box,
+  .elementor-7 .elementor-element.elementor-element-d56370c .wpr-promo-box-content,
+  .elementor-7 .elementor-element.elementor-element-d56370c .wpr-promo-box-title,
+  .elementor-7 .elementor-element.elementor-element-d56370c .wpr-promo-box-description,
+  .elementor-7 .elementor-element.elementor-element-d56370c p,
+  .elementor-7 .elementor-element.elementor-element-3c377e7 .wpr-promo-box,
+  .elementor-7 .elementor-element.elementor-element-3c377e7 .wpr-promo-box-content,
+  .elementor-7 .elementor-element.elementor-element-3c377e7 .wpr-promo-box-title,
+  .elementor-7 .elementor-element.elementor-element-3c377e7 .wpr-promo-box-description,
+  .elementor-7 .elementor-element.elementor-element-3c377e7 p {
+    text-align: center !important;
+  }
+
+  /* Section 6: Comprehensive Hospital and Diagnostic Services (Outside Card -> Left Aligned) */
+  .elementor-7 .elementor-element.elementor-element-55efdd7 {
+    padding-top: 25px !important;
+    padding-bottom: 25px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    margin: 0 !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-f7c0495 {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-8e64a79 img {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    border-radius: 10px !important;
+    margin: 0 0 20px 0 !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-a4546b4,
+  .elementor-7 .elementor-element.elementor-element-a4546b4 .elementor-heading-title {
+    text-align: left !important;
+    font-size: 26px !important;
+    line-height: 1.35 !important;
+    font-weight: 700 !important;
+    color: #222222 !important;
+    margin: 0 0 16px 0 !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-ab78fe7,
+  .elementor-7 .elementor-element.elementor-element-ab78fe7 p {
+    text-align: left !important;
+    font-size: 15px !important;
+    line-height: 1.65 !important;
+    color: #555555 !important;
+    margin: 0 0 20px 0 !important;
+  }
+
+  /* Eliminate dead white space from fully hidden elementor-element-f84ac90 */
+  .elementor-7 .elementor-element.elementor-element-f84ac90 {
+    display: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Section 8: Life Experience / Why Choose Vcare (Outside Card -> Left Aligned) */
+  .elementor-7 .elementor-element.elementor-element-8da6279,
+  .elementor-7 .elementor-element.elementor-element-8da6279 > .elementor-container {
+    min-height: 0 !important;
+    height: auto !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-8da6279 {
+    padding-top: 35px !important;
+    padding-bottom: 25px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    margin: 25px 0 0 0 !important;
+  }
+
+  /* Ensure hidden columns take zero space on mobile */
+  .elementor-7 .elementor-element-ecb786b,
+  .elementor-7 .elementor-element-47e21f6,
+  .elementor-7 .elementor-element-c7ae568,
+  .elementor-7 .elementor-element-86e655b {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-a03034c {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-757c6c7,
+  .elementor-7 .elementor-element.elementor-element-757c6c7 .elementor-heading-title {
+    text-align: left !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    color: #008779 !important;
+    margin: 0 0 8px 0 !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-81d8705,
+  .elementor-7 .elementor-element.elementor-element-81d8705 .elementor-heading-title {
+    text-align: left !important;
+    font-size: 26px !important;
+    line-height: 1.35 !important;
+    font-weight: 700 !important;
+    color: #222222 !important;
+    margin: 0 0 16px 0 !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-c2bcbe9,
+  .elementor-7 .elementor-element.elementor-element-c2bcbe9 .elementor-heading-title,
+  .elementor-7 .elementor-element.elementor-element-c2bcbe9 p {
+    text-align: left !important;
+    font-size: 15px !important;
+    line-height: 1.65 !important;
+    font-weight: 400 !important;
+    color: #555555 !important;
+    margin: 0 0 20px 0 !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-2da0f42 {
+    text-align: left !important;
+    margin: 0 0 20px 0 !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-2da0f42 .wpr-button-wrap {
+    text-align: left !important;
+    margin: 0 !important;
+    display: inline-block !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-2da0f42 .wpr-button {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 12px 28px !important;
+    border-radius: 4px !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-73cc1a2 img {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    border-radius: 10px !important;
+    margin: 0 0 20px 0 !important;
+  }
+
+  /* Section 13: "Visit Us Today" (Inside Card -> Center Aligned) */
+  .elementor-7 .elementor-element.elementor-element-355fd86 {
+    padding-top: 25px !important;
+    padding-bottom: 25px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    margin: 20px 0 !important;
+    border-radius: 20px !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-637e850 {
+    padding: 25px 20px !important;
+    border-radius: 16px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-55d8b63 {
+    text-align: center !important;
+    margin: 0 0 12px 0 !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-55d8b63 .wpr-dual-title {
+    font-size: 26px !important;
+    color: #ffffff !important;
+    text-align: center !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-61cc4ae {
+    text-align: center !important;
+    margin: 0 0 20px 0 !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-61cc4ae p {
+    text-align: center !important;
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+    color: #ffffff !important;
+    margin: 0 !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-ad7fcf4 {
+    display: flex !important;
+    justify-content: center !important;
+    margin: 0 auto !important;
+    text-align: center !important;
+  }
+
+  .elementor-7 .elementor-element.elementor-element-ad7fcf4 .wpr-button {
+    padding: 12px 32px !important;
+  }
+
+  /* -----------------------------------------------------------
+     16. FLOATING CHATY WIDGET
+     ----------------------------------------------------------- */
+  #vcare-chaty-container,
+  .chaty-floating-widget-fallback {
+    bottom: 20px !important;
+    left: 20px !important;
+    z-index: 99999 !important;
+  }
+}
+
+

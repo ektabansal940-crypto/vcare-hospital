@@ -1,0 +1,23 @@
+# Apache Configuration for V Care Multispeciality Hospital
+DirectoryIndex index.html index.php
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /V%20Care%20Multispeciality%20Hospital/
+
+    # Handle clean URLs without .html
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME}.html -f
+    RewriteRule ^(.*)$ $1.html [L]
+</IfModule>
+
+# MIME Types for Web Fonts and modern formats
+<IfModule mod_mime.c>
+    AddType font/woff2 .woff2
+    AddType font/woff .woff
+    AddType font/ttf .ttf
+    AddType font/eot .eot
+    AddType image/svg+xml .svg
+    AddType image/webp .webp
+</IfModule>
