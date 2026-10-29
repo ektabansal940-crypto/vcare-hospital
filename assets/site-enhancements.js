@@ -1,9 +1,79 @@
 /**
  * V Care Multispeciality Hospital - Interactive Enhancements & UI Behaviors
- * Ensures all menus, forms, widgets, sliders, and counters function smoothly locally and online.
+ * Ensures all menus, forms, widgets, sliders, counters, and SMTP email delivery
+ * function smoothly both locally and online (e.g. GitHub Pages).
  */
 
+/**
+ * ============================================================================
+ * EMAIL & SMTP CONFIGURATION (Powered by EmailJS)
+ * ============================================================================
+ * Enables automatic email delivery to hospitalvcaremultispeciality@gmail.com
+ * from static hosts like GitHub Pages or custom servers without requiring backend PHP.
+ *
+ * HOW TO ACTIVATE LIVE EMAILS (Takes ~3 minutes):
+ * 1. Sign up for free at https://www.emailjs.com/
+ * 2. Go to 'Email Services' -> 'Add New Service' -> Select 'Gmail' (or Custom SMTP).
+ *    Connect 'hospitalvcaremultispeciality@gmail.com' and copy the SERVICE_ID.
+ * 3. Go to 'Email Templates' -> 'Create New Template' and copy the TEMPLATE_ID.
+ *    (Use variables: {{form_type}}, {{from_name}}, {{email}}, {{appointment_date}},
+ *     {{appointment_time}}, {{subject}}, {{message}}, {{to_email}})
+ * 4. Go to 'Account' / 'API Keys' -> Copy your PUBLIC_KEY.
+ * 5. Paste the 3 values into EMAILJS_CONFIG below.
+ */
+const EMAILJS_CONFIG = {
+    // EmailJS Public Key (Account > API Keys)
+    publicKey: 'YOUR_PUBLIC_KEY',
+
+    // EmailJS Service ID (Email Services > your Gmail or custom SMTP service)
+    serviceId: 'YOUR_SERVICE_ID',
+
+    // EmailJS Template IDs (can be the same template or separate)
+    appointmentTemplateId: 'YOUR_APPOINTMENT_TEMPLATE_ID',
+    contactTemplateId: 'YOUR_CONTACT_TEMPLATE_ID',
+
+    // Hospital destination email
+    hospitalEmail: 'hospitalvcaremultispeciality@gmail.com'
+};
+
+// Check if credentials are configured
+function isEmailJsConfigured() {
+    return (
+        EMAILJS_CONFIG.publicKey &&
+        EMAILJS_CONFIG.publicKey !== 'YOUR_PUBLIC_KEY' &&
+        EMAILJS_CONFIG.serviceId &&
+        EMAILJS_CONFIG.serviceId !== 'YOUR_SERVICE_ID'
+    );
+}
+
+// Preload EmailJS SDK asynchronously
+function ensureEmailJsSdk(callback) {
+    if (window.emailjs) {
+        if (callback) callback(window.emailjs);
+        return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
+    script.async = true;
+    script.onload = function() {
+        if (window.emailjs && EMAILJS_CONFIG.publicKey && EMAILJS_CONFIG.publicKey !== 'YOUR_PUBLIC_KEY') {
+            try {
+                window.emailjs.init({ publicKey: EMAILJS_CONFIG.publicKey });
+            } catch (e) {
+                console.warn('[EmailJS] Init warning:', e);
+            }
+        }
+        if (callback) callback(window.emailjs);
+    };
+    script.onerror = function() {
+        console.error('[EmailJS] SDK failed to load from CDN');
+        if (callback) callback(null);
+    };
+    document.head.appendChild(script);
+}
+
 document.addEventListener('DOMContentLoaded', function() {
+    ensureEmailJsSdk();
     initMobileNav();
     initChatyFallback();
     initFormHandlers();
@@ -122,7 +192,7 @@ function initChatyFallback() {
     }
 }
 
-// 3. Interactive Forms (Appointment & Contact)
+// 3. Interactive Forms (Appointment & Contact with SMTP Email Delivery)
 function initFormHandlers() {
     // Appointment Form
     const apptForm = document.querySelector('.wpr-form');
@@ -130,8 +200,8 @@ function initFormHandlers() {
         apptForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const dateInput = apptForm.querySelector('input[type="date"]');
-            const timeInput = apptForm.querySelector('input[type="time"]');
+            const dateInput = apptForm.querySelector('input[type="date"], input[name*="f7bddbf"]');
+            const timeInput = apptForm.querySelector('input[type="time"], input[name*="name"]');
             const msgInput = apptForm.querySelector('textarea');
             
             const dateVal = dateInput ? dateInput.value : '';
@@ -139,14 +209,31 @@ function initFormHandlers() {
             const msgVal = msgInput ? msgInput.value.trim() : '';
             
             if (!dateVal || !timeVal || !msgVal) {
-                showNotice(apptForm, 'Please fill in the appointment date, time, and patient information.', 'error');
+                showNotice(apptForm, 'Please select an appointment date, time, and provide patient contact details.', 'error');
                 return;
             }
             
             const submitBtn = apptForm.querySelector('button[type="submit"], input[type="submit"]');
-            if (submitBtn) submitBtn.disabled = true;
-            
-            // Send AJAX to local handler if available
+            const originalBtnHtml = submitBtn ? submitBtn.innerHTML : '';
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span>Sending Request...</span>';
+            }
+
+            // Prepare email payload
+            const templateParams = {
+                form_type: 'Doctor Appointment Booking Request',
+                to_email: EMAILJS_CONFIG.hospitalEmail,
+                appointment_date: dateVal,
+                appointment_time: timeVal,
+                patient_info: msgVal,
+                message: `New Appointment Request:\n\nDate: ${dateVal}\nTime: ${timeVal}\n\nPatient Details:\n${msgVal}`,
+                subject: `New Doctor Appointment Request: ${dateVal} at ${timeVal}`,
+                from_name: 'Website Patient',
+                reply_to: EMAILJS_CONFIG.hospitalEmail
+            };
+
+            // Non-blocking local API log if hosted locally on XAMPP
             fetch('wp-admin/admin-ajax.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -156,11 +243,54 @@ function initFormHandlers() {
                     time: timeVal,
                     message: msgVal
                 })
-            }).catch(() => {}).finally(() => {
-                showNotice(apptForm, '✓ Thank you! Your appointment request has been submitted successfully. Our hospital desk will contact you shortly to confirm your booking.', 'success');
-                apptForm.reset();
-                if (submitBtn) submitBtn.disabled = false;
-            });
+            }).catch(() => {});
+
+            // If EmailJS is configured, send email via SMTP service
+            if (isEmailJsConfigured()) {
+                ensureEmailJsSdk(function(emailjsInstance) {
+                    if (!emailjsInstance) {
+                        showNotice(apptForm, '⚠️ Could not connect to mail service. Please contact us directly at <a href="tel:+919076245512" style="text-decoration:underline;font-weight:700;">+91 90762 45512</a> or WhatsApp.', 'error');
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.innerHTML = originalBtnHtml;
+                        }
+                        return;
+                    }
+
+                    const templateId = (EMAILJS_CONFIG.appointmentTemplateId && EMAILJS_CONFIG.appointmentTemplateId !== 'YOUR_APPOINTMENT_TEMPLATE_ID')
+                        ? EMAILJS_CONFIG.appointmentTemplateId
+                        : EMAILJS_CONFIG.contactTemplateId;
+
+                    emailjsInstance.send(
+                        EMAILJS_CONFIG.serviceId,
+                        templateId,
+                        templateParams,
+                        EMAILJS_CONFIG.publicKey
+                    ).then(function() {
+                        showNotice(apptForm, '✓ Thank you! Your appointment request has been submitted successfully to our hospital desk. We will contact you shortly to confirm your visit.', 'success');
+                        apptForm.reset();
+                    }).catch(function(err) {
+                        console.error('[EmailJS] Send Error:', err);
+                        showNotice(apptForm, '⚠️ Failed to send email alert. Please call our hospital reception at <a href="tel:+919076245512" style="text-decoration:underline;font-weight:700;">+91 90762 45512</a> or connect via WhatsApp.', 'error');
+                    }).finally(function() {
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.innerHTML = originalBtnHtml;
+                        }
+                    });
+                });
+            } else {
+                // Demo / Setup mode notification
+                setTimeout(function() {
+                    console.info('[EmailJS Pending Setup] Appointment form submitted with data:', templateParams);
+                    showNotice(apptForm, '✓ Appointment request submitted! <em>(Note: To forward real emails directly to hospitalvcaremultispeciality@gmail.com, enter your EmailJS credentials in assets/site-enhancements.js)</em>', 'success');
+                    apptForm.reset();
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = originalBtnHtml;
+                    }
+                }, 600);
+            }
         });
     }
 
@@ -170,29 +300,102 @@ function initFormHandlers() {
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const inputs = contactForm.querySelectorAll('input[type="text"], input[type="email"], textarea');
-            let hasContent = false;
-            inputs.forEach(inp => {
-                if (inp.value.trim()) hasContent = true;
-            });
-            
-            if (!hasContent) {
-                showNotice(contactForm, 'Please fill in your contact details before submitting.', 'error');
+            // Honeypot check
+            const honeypot = contactForm.querySelector('input[name="item_meta[7]"]');
+            if (honeypot && honeypot.value.trim()) {
+                showNotice(contactForm, 'Spam detected. Submission ignored.', 'error');
                 return;
             }
-            
+
+            const firstName = (contactForm.querySelector('input[name="item_meta[1]"]') || {}).value || '';
+            const lastName = (contactForm.querySelector('input[name="item_meta[2]"]') || {}).value || '';
+            const fullName = (firstName.trim() + ' ' + lastName.trim()).trim() || 'Website Visitor';
+            const email = ((contactForm.querySelector('input[name="item_meta[3]"]') || {}).value || '').trim();
+            const subject = ((contactForm.querySelector('input[name="item_meta[4]"]') || {}).value || '').trim() || 'New Website Contact Inquiry';
+            const message = ((contactForm.querySelector('textarea[name="item_meta[5]"]') || {}).value || '').trim();
+
+            if (!email || !message) {
+                showNotice(contactForm, 'Please fill in your email address and message before submitting.', 'error');
+                return;
+            }
+
             const submitBtn = contactForm.querySelector('input[type="submit"], button[type="submit"]');
-            if (submitBtn) submitBtn.disabled = true;
-            
+            const originalBtnText = submitBtn ? (submitBtn.tagName === 'INPUT' ? submitBtn.value : submitBtn.innerHTML) : '';
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                if (submitBtn.tagName === 'INPUT') submitBtn.value = 'Sending Message...';
+                else submitBtn.innerHTML = 'Sending Message...';
+            }
+
+            // Prepare email payload
+            const templateParams = {
+                form_type: 'General Contact Inquiry',
+                to_email: EMAILJS_CONFIG.hospitalEmail,
+                from_name: fullName,
+                first_name: firstName,
+                last_name: lastName,
+                name: fullName,
+                reply_to: email,
+                email: email,
+                subject: subject,
+                message: message
+            };
+
+            // Non-blocking local API log if running locally
             fetch('wp-admin/admin-ajax.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: new URLSearchParams(new FormData(contactForm))
-            }).catch(() => {}).finally(() => {
-                showNotice(contactForm, '✓ Thank you! Your message has been sent successfully. Our healthcare team will respond to you promptly.', 'success');
-                contactForm.reset();
-                if (submitBtn) submitBtn.disabled = false;
-            });
+            }).catch(() => {});
+
+            // If EmailJS is configured, send email via SMTP service
+            if (isEmailJsConfigured()) {
+                ensureEmailJsSdk(function(emailjsInstance) {
+                    if (!emailjsInstance) {
+                        showNotice(contactForm, '⚠️ Could not connect to mail service. Please contact us directly at <a href="tel:+919076245512" style="text-decoration:underline;font-weight:700;">+91 90762 45512</a> or WhatsApp.', 'error');
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            if (submitBtn.tagName === 'INPUT') submitBtn.value = originalBtnText;
+                            else submitBtn.innerHTML = originalBtnText;
+                        }
+                        return;
+                    }
+
+                    const templateId = (EMAILJS_CONFIG.contactTemplateId && EMAILJS_CONFIG.contactTemplateId !== 'YOUR_CONTACT_TEMPLATE_ID')
+                        ? EMAILJS_CONFIG.contactTemplateId
+                        : EMAILJS_CONFIG.appointmentTemplateId;
+
+                    emailjsInstance.send(
+                        EMAILJS_CONFIG.serviceId,
+                        templateId,
+                        templateParams,
+                        EMAILJS_CONFIG.publicKey
+                    ).then(function() {
+                        showNotice(contactForm, '✓ Thank you! Your message has been sent successfully to V Care Multispeciality Hospital. Our healthcare team will respond promptly.', 'success');
+                        contactForm.reset();
+                    }).catch(function(err) {
+                        console.error('[EmailJS] Contact Send Error:', err);
+                        showNotice(contactForm, '⚠️ Failed to send message. Please call our hospital desk at <a href="tel:+919076245512" style="text-decoration:underline;font-weight:700;">+91 90762 45512</a> or connect via WhatsApp.', 'error');
+                    }).finally(function() {
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            if (submitBtn.tagName === 'INPUT') submitBtn.value = originalBtnText;
+                            else submitBtn.innerHTML = originalBtnText;
+                        }
+                    });
+                });
+            } else {
+                setTimeout(function() {
+                    console.info('[EmailJS Pending Setup] Contact form submitted with data:', templateParams);
+                    showNotice(contactForm, '✓ Thank you! Your message has been received! <em>(Note: To forward real emails directly to hospitalvcaremultispeciality@gmail.com, enter your EmailJS credentials in assets/site-enhancements.js)</em>', 'success');
+                    contactForm.reset();
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        if (submitBtn.tagName === 'INPUT') submitBtn.value = originalBtnText;
+                        else submitBtn.innerHTML = originalBtnText;
+                    }
+                }, 600);
+            }
         });
     }
 }
@@ -221,7 +424,7 @@ function showNotice(formEl, message, type) {
         notice.style.color = '#721c24';
         notice.style.border = '1px solid #f5c6cb';
     }
-    notice.textContent = message;
+    notice.innerHTML = message;
     notice.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 

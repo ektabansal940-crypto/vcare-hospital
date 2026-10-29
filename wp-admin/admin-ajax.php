@@ -24,6 +24,13 @@ if ($action === 'wpr_form_submission' || isset($_POST['form_fields'])) {
     ];
     @file_put_contents($log_dir . '/appointments.log', json_encode($entry) . "\n", FILE_APPEND);
     
+    // Optional PHP mail() attempt if SMTP configured in php.ini
+    $to = 'hospitalvcaremultispeciality@gmail.com';
+    $subject = 'New Appointment Request - V Care Hospital';
+    $message = "New appointment booking received:\n" . print_r($_POST, true);
+    $headers = "From: webmaster@vcaremultispecialityhospital.in\r\nReply-To: hospitalvcaremultispeciality@gmail.com\r\n";
+    @mail($to, $subject, $message, $headers);
+    
     echo json_encode([
         'status' => 'success',
         'message' => 'Appointment request received successfully.',
@@ -39,6 +46,13 @@ if (isset($_POST['frm_action']) || isset($_POST['item_meta'])) {
         'data' => $_POST
     ];
     @file_put_contents($log_dir . '/contacts.log', json_encode($entry) . "\n", FILE_APPEND);
+    
+    // Optional PHP mail() attempt if SMTP configured in php.ini
+    $to = 'hospitalvcaremultispeciality@gmail.com';
+    $subject = 'New Contact Message - V Care Hospital';
+    $message = "New contact message received:\n" . print_r($_POST, true);
+    $headers = "From: webmaster@vcaremultispecialityhospital.in\r\nReply-To: hospitalvcaremultispeciality@gmail.com\r\n";
+    @mail($to, $subject, $message, $headers);
     
     echo json_encode([
         'status' => 'success',
