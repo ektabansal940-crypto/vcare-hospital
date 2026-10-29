@@ -15,3 +15,7 @@ $RECYCLE.BIN/
 *.log
 *.sql
 *.sqlite
+
+# Sensitive SMTP credentials
+*smtp-config.php
+
