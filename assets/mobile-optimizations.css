@@ -708,21 +708,37 @@
     padding: 0 !important;
   }
 
+  /* Services flip box cards on mobile */
   .wpr-flip-box,
+  .elementor-section.services .wpr-flip-box,
+  .elementor-element.elementor-element-41b04ef .wpr-flip-box,
+  .elementor-element.elementor-element-42b93e1 .wpr-flip-box,
+  .elementor-element.elementor-element-b7ecc6a .wpr-flip-box,
+  .elementor-element.elementor-element-6a9d86e .wpr-flip-box,
+  .elementor-element.elementor-element-2d898f2 .wpr-flip-box {
+    height: 330px !important;
+    min-height: 330px !important;
+    border-radius: 12px !important;
+  }
+
   .wpr-flip-box-item,
-  .wpr-flip-box-front,
-  .wpr-flip-box-back,
   .wpr-flip-box-overlay {
     border-radius: 12px !important;
   }
 
+  /* Reset outer card front/back padding so there is zero double-padding conflict */
   .wpr-flip-box-front,
-  .wpr-flip-box-back {
-    padding: 24px 20px !important;
+  .wpr-flip-box-back,
+  .elementor-section.services .wpr-flip-box-front,
+  .elementor-section.services .wpr-flip-box-back {
+    padding: 0 !important;
+    border-radius: 12px !important;
     box-sizing: border-box !important;
   }
 
   /* Strictly uniform padding across all service flip-box cards on mobile */
+  .wpr-flip-box-front .wpr-flip-box-content,
+  .wpr-flip-box-back .wpr-flip-box-content,
   .elementor-element.elementor-element-41b04ef .wpr-flip-box-front .wpr-flip-box-content,
   .elementor-element.elementor-element-42b93e1 .wpr-flip-box-front .wpr-flip-box-content,
   .elementor-element.elementor-element-b7ecc6a .wpr-flip-box-front .wpr-flip-box-content,
@@ -730,10 +746,51 @@
   .elementor-element.elementor-element-2d898f2 .wpr-flip-box-front .wpr-flip-box-content,
   .elementor-section.services .wpr-flip-box-front .wpr-flip-box-content,
   .elementor-section.services .wpr-flip-box-back .wpr-flip-box-content {
-    padding: 20px 20px 20px 20px !important;
+    padding: 32px 22px 24px 22px !important;
     text-align: center !important;
-    justify-content: center !important;
+    justify-content: flex-start !important;
+    -webkit-justify-content: flex-start !important;
+    box-sizing: border-box !important;
   }
+
+  /* Exactly identical icon positioning and top spacing on all cards */
+  .elementor-section.services .wpr-flip-box-icon,
+  .elementor-element.elementor-element-41b04ef .wpr-flip-box-icon,
+  .elementor-element.elementor-element-42b93e1 .wpr-flip-box-icon,
+  .elementor-element.elementor-element-b7ecc6a .wpr-flip-box-icon,
+  .elementor-element.elementor-element-6a9d86e .wpr-flip-box-icon,
+  .elementor-element.elementor-element-2d898f2 .wpr-flip-box-icon {
+    margin-top: 0 !important;
+    margin-bottom: 12px !important;
+    font-size: 38px !important;
+    line-height: 1 !important;
+  }
+
+  /* Exactly identical title spacing on all cards */
+  .elementor-section.services .wpr-flip-box-title,
+  .elementor-element.elementor-element-41b04ef .wpr-flip-box-title,
+  .elementor-element.elementor-element-42b93e1 .wpr-flip-box-title,
+  .elementor-element.elementor-element-b7ecc6a .wpr-flip-box-title,
+  .elementor-element.elementor-element-6a9d86e .wpr-flip-box-title,
+  .elementor-element.elementor-element-2d898f2 .wpr-flip-box-title {
+    font-size: 19px !important;
+    font-weight: 600 !important;
+    margin: 0 0 10px 0 !important;
+    line-height: 1.3 !important;
+  }
+
+  /* Exactly identical description spacing on all cards */
+  .elementor-section.services .wpr-flip-box-description,
+  .elementor-section.services .wpr-flip-box-description p,
+  .elementor-element.elementor-element-41b04ef .wpr-flip-box-description,
+  .elementor-element.elementor-element-41b04ef .wpr-flip-box-description p,
+  .elementor-element.elementor-element-42b93e1 .wpr-flip-box-description,
+  .elementor-element.elementor-element-42b93e1 .wpr-flip-box-description p {
+    font-size: 13.5px !important;
+    line-height: 1.55 !important;
+    margin-bottom: 0 !important;
+  }
+
 
 
   /* -----------------------------------------------------------
