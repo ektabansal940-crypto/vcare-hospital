@@ -722,6 +722,20 @@
     box-sizing: border-box !important;
   }
 
+  /* Strictly uniform padding across all service flip-box cards on mobile */
+  .elementor-element.elementor-element-41b04ef .wpr-flip-box-front .wpr-flip-box-content,
+  .elementor-element.elementor-element-42b93e1 .wpr-flip-box-front .wpr-flip-box-content,
+  .elementor-element.elementor-element-b7ecc6a .wpr-flip-box-front .wpr-flip-box-content,
+  .elementor-element.elementor-element-6a9d86e .wpr-flip-box-front .wpr-flip-box-content,
+  .elementor-element.elementor-element-2d898f2 .wpr-flip-box-front .wpr-flip-box-content,
+  .elementor-section.services .wpr-flip-box-front .wpr-flip-box-content,
+  .elementor-section.services .wpr-flip-box-back .wpr-flip-box-content {
+    padding: 20px 20px 20px 20px !important;
+    text-align: center !important;
+    justify-content: center !important;
+  }
+
+
   /* -----------------------------------------------------------
      8. "MEET DR. AZHAR ALI" & "THE VISION BEHIND VCARE" (Section 11)
      ----------------------------------------------------------- */
