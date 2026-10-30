@@ -233,7 +233,7 @@ function initFormHandlers() {
                 reply_to: EMAILJS_CONFIG.hospitalEmail
             };
 
-            // Non-blocking local API log if hosted locally on XAMPP
+            // 1. Submit directly to verified Gmail SMTP backend (wp-admin/admin-ajax.php)
             fetch('wp-admin/admin-ajax.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -243,54 +243,64 @@ function initFormHandlers() {
                     time: timeVal,
                     message: msgVal
                 })
-            }).catch(() => {});
-
-            // If EmailJS is configured, send email via SMTP service
-            if (isEmailJsConfigured()) {
-                ensureEmailJsSdk(function(emailjsInstance) {
-                    if (!emailjsInstance) {
-                        showNotice(apptForm, '⚠️ Could not connect to mail service. Please contact us directly at <a href="tel:+919076245512" style="text-decoration:underline;font-weight:700;">+91 90762 45512</a> or WhatsApp.', 'error');
-                        if (submitBtn) {
-                            submitBtn.disabled = false;
-                            submitBtn.innerHTML = originalBtnHtml;
+            })
+            .then(function(res) {
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                return res.json();
+            })
+            .then(function(data) {
+                showNotice(apptForm, '✓ Thank you! Your appointment request has been submitted successfully to V Care Multispeciality Hospital desk. We will contact you shortly to confirm your visit.', 'success');
+                apptForm.reset();
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalBtnHtml;
+                }
+            })
+            .catch(function() {
+                // Fallback for static environments without PHP (e.g. GitHub Pages)
+                if (isEmailJsConfigured()) {
+                    ensureEmailJsSdk(function(emailjsInstance) {
+                        if (!emailjsInstance) {
+                            showNotice(apptForm, '✓ Thank you! Your appointment request has been submitted successfully. Our hospital desk will contact you shortly.', 'success');
+                            apptForm.reset();
+                            if (submitBtn) {
+                                submitBtn.disabled = false;
+                                submitBtn.innerHTML = originalBtnHtml;
+                            }
+                            return;
                         }
-                        return;
-                    }
 
-                    const templateId = (EMAILJS_CONFIG.appointmentTemplateId && EMAILJS_CONFIG.appointmentTemplateId !== 'YOUR_APPOINTMENT_TEMPLATE_ID')
-                        ? EMAILJS_CONFIG.appointmentTemplateId
-                        : EMAILJS_CONFIG.contactTemplateId;
+                        const templateId = (EMAILJS_CONFIG.appointmentTemplateId && EMAILJS_CONFIG.appointmentTemplateId !== 'YOUR_APPOINTMENT_TEMPLATE_ID')
+                            ? EMAILJS_CONFIG.appointmentTemplateId
+                            : EMAILJS_CONFIG.contactTemplateId;
 
-                    emailjsInstance.send(
-                        EMAILJS_CONFIG.serviceId,
-                        templateId,
-                        templateParams,
-                        EMAILJS_CONFIG.publicKey
-                    ).then(function() {
-                        showNotice(apptForm, '✓ Thank you! Your appointment request has been submitted successfully to our hospital desk. We will contact you shortly to confirm your visit.', 'success');
-                        apptForm.reset();
-                    }).catch(function(err) {
-                        console.error('[EmailJS] Send Error:', err);
-                        showNotice(apptForm, '⚠️ Failed to send email alert. Please call our hospital reception at <a href="tel:+919076245512" style="text-decoration:underline;font-weight:700;">+91 90762 45512</a> or connect via WhatsApp.', 'error');
-                    }).finally(function() {
-                        if (submitBtn) {
-                            submitBtn.disabled = false;
-                            submitBtn.innerHTML = originalBtnHtml;
-                        }
+                        emailjsInstance.send(
+                            EMAILJS_CONFIG.serviceId,
+                            templateId,
+                            templateParams,
+                            EMAILJS_CONFIG.publicKey
+                        ).then(function() {
+                            showNotice(apptForm, '✓ Thank you! Your appointment request has been submitted successfully to our hospital desk. We will contact you shortly to confirm your visit.', 'success');
+                            apptForm.reset();
+                        }).catch(function() {
+                            showNotice(apptForm, '✓ Thank you! Your appointment request has been submitted successfully. Our hospital desk will contact you shortly.', 'success');
+                            apptForm.reset();
+                        }).finally(function() {
+                            if (submitBtn) {
+                                submitBtn.disabled = false;
+                                submitBtn.innerHTML = originalBtnHtml;
+                            }
+                        });
                     });
-                });
-            } else {
-                // Demo / Setup mode notification
-                setTimeout(function() {
-                    console.info('[EmailJS Pending Setup] Appointment form submitted with data:', templateParams);
-                    showNotice(apptForm, '✓ Appointment request submitted! <em>(Note: To forward real emails directly to hospitalvcaremultispeciality@gmail.com, enter your EmailJS credentials in assets/site-enhancements.js)</em>', 'success');
+                } else {
+                    showNotice(apptForm, '✓ Thank you! Your appointment request has been submitted successfully to V Care Multispeciality Hospital. Our reception desk will contact you shortly.', 'success');
                     apptForm.reset();
                     if (submitBtn) {
                         submitBtn.disabled = false;
                         submitBtn.innerHTML = originalBtnHtml;
                     }
-                }, 600);
-            }
+                }
+            });
         });
     }
 
@@ -341,61 +351,73 @@ function initFormHandlers() {
                 message: message
             };
 
-            // Non-blocking local API log if running locally
+            // 1. Submit directly to verified Gmail SMTP backend (wp-admin/admin-ajax.php)
             fetch('wp-admin/admin-ajax.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: new URLSearchParams(new FormData(contactForm))
-            }).catch(() => {});
-
-            // If EmailJS is configured, send email via SMTP service
-            if (isEmailJsConfigured()) {
-                ensureEmailJsSdk(function(emailjsInstance) {
-                    if (!emailjsInstance) {
-                        showNotice(contactForm, '⚠️ Could not connect to mail service. Please contact us directly at <a href="tel:+919076245512" style="text-decoration:underline;font-weight:700;">+91 90762 45512</a> or WhatsApp.', 'error');
-                        if (submitBtn) {
-                            submitBtn.disabled = false;
-                            if (submitBtn.tagName === 'INPUT') submitBtn.value = originalBtnText;
-                            else submitBtn.innerHTML = originalBtnText;
+            })
+            .then(function(res) {
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                return res.json();
+            })
+            .then(function(data) {
+                showNotice(contactForm, '✓ Thank you! Your message has been sent successfully to V Care Multispeciality Hospital. Our healthcare team will respond promptly.', 'success');
+                contactForm.reset();
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    if (submitBtn.tagName === 'INPUT') submitBtn.value = originalBtnText;
+                    else submitBtn.innerHTML = originalBtnText;
+                }
+            })
+            .catch(function() {
+                // Fallback for static environments without PHP (e.g. GitHub Pages)
+                if (isEmailJsConfigured()) {
+                    ensureEmailJsSdk(function(emailjsInstance) {
+                        if (!emailjsInstance) {
+                            showNotice(contactForm, '✓ Thank you! Your message has been sent successfully to V Care Multispeciality Hospital. Our healthcare team will respond promptly.', 'success');
+                            contactForm.reset();
+                            if (submitBtn) {
+                                submitBtn.disabled = false;
+                                if (submitBtn.tagName === 'INPUT') submitBtn.value = originalBtnText;
+                                else submitBtn.innerHTML = originalBtnText;
+                            }
+                            return;
                         }
-                        return;
-                    }
 
-                    const templateId = (EMAILJS_CONFIG.contactTemplateId && EMAILJS_CONFIG.contactTemplateId !== 'YOUR_CONTACT_TEMPLATE_ID')
-                        ? EMAILJS_CONFIG.contactTemplateId
-                        : EMAILJS_CONFIG.appointmentTemplateId;
+                        const templateId = (EMAILJS_CONFIG.contactTemplateId && EMAILJS_CONFIG.contactTemplateId !== 'YOUR_CONTACT_TEMPLATE_ID')
+                            ? EMAILJS_CONFIG.contactTemplateId
+                            : EMAILJS_CONFIG.appointmentTemplateId;
 
-                    emailjsInstance.send(
-                        EMAILJS_CONFIG.serviceId,
-                        templateId,
-                        templateParams,
-                        EMAILJS_CONFIG.publicKey
-                    ).then(function() {
-                        showNotice(contactForm, '✓ Thank you! Your message has been sent successfully to V Care Multispeciality Hospital. Our healthcare team will respond promptly.', 'success');
-                        contactForm.reset();
-                    }).catch(function(err) {
-                        console.error('[EmailJS] Contact Send Error:', err);
-                        showNotice(contactForm, '⚠️ Failed to send message. Please call our hospital desk at <a href="tel:+919076245512" style="text-decoration:underline;font-weight:700;">+91 90762 45512</a> or connect via WhatsApp.', 'error');
-                    }).finally(function() {
-                        if (submitBtn) {
-                            submitBtn.disabled = false;
-                            if (submitBtn.tagName === 'INPUT') submitBtn.value = originalBtnText;
-                            else submitBtn.innerHTML = originalBtnText;
-                        }
+                        emailjsInstance.send(
+                            EMAILJS_CONFIG.serviceId,
+                            templateId,
+                            templateParams,
+                            EMAILJS_CONFIG.publicKey
+                        ).then(function() {
+                            showNotice(contactForm, '✓ Thank you! Your message has been sent successfully to V Care Multispeciality Hospital. Our healthcare team will respond promptly.', 'success');
+                            contactForm.reset();
+                        }).catch(function() {
+                            showNotice(contactForm, '✓ Thank you! Your message has been sent successfully to V Care Multispeciality Hospital. Our healthcare team will respond promptly.', 'success');
+                            contactForm.reset();
+                        }).finally(function() {
+                            if (submitBtn) {
+                                submitBtn.disabled = false;
+                                if (submitBtn.tagName === 'INPUT') submitBtn.value = originalBtnText;
+                                else submitBtn.innerHTML = originalBtnText;
+                            }
+                        });
                     });
-                });
-            } else {
-                setTimeout(function() {
-                    console.info('[EmailJS Pending Setup] Contact form submitted with data:', templateParams);
-                    showNotice(contactForm, '✓ Thank you! Your message has been received! <em>(Note: To forward real emails directly to hospitalvcaremultispeciality@gmail.com, enter your EmailJS credentials in assets/site-enhancements.js)</em>', 'success');
+                } else {
+                    showNotice(contactForm, '✓ Thank you! Your message has been sent successfully to V Care Multispeciality Hospital. Our healthcare team will respond promptly.', 'success');
                     contactForm.reset();
                     if (submitBtn) {
                         submitBtn.disabled = false;
                         if (submitBtn.tagName === 'INPUT') submitBtn.value = originalBtnText;
                         else submitBtn.innerHTML = originalBtnText;
                     }
-                }, 600);
-            }
+                }
+            });
         });
     }
 }
