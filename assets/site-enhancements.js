@@ -33,7 +33,7 @@ const EMAILJS_CONFIG = {
     contactTemplateId: 'YOUR_CONTACT_TEMPLATE_ID',
 
     // Hospital destination email
-    hospitalEmail: 'hospitalvcaremultispeciality@gmail.com'
+    hospitalEmail: 'rb887087@gmail.com'
 };
 
 // Check if credentials are configured

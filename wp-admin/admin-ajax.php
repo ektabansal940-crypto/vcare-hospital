@@ -93,7 +93,7 @@ if ($action === 'wpr_form_submission' || isset($_POST['form_fields'])) {
     ];
     @file_put_contents($log_dir . '/appointments.log', json_encode($entry) . "\n", FILE_APPEND);
     
-    $to = defined('HOSPITAL_EMAIL') ? HOSPITAL_EMAIL : 'hospitalvcaremultispeciality@gmail.com';
+    $to = defined('HOSPITAL_EMAIL') ? HOSPITAL_EMAIL : 'rb887087@gmail.com';
     $subject = 'New Appointment Request - V Care Hospital';
     $date = $_POST['date'] ?? $_POST['form_fields']['f7bddbf'] ?? 'N/A';
     $time = $_POST['time'] ?? $_POST['form_fields']['name'] ?? 'N/A';
@@ -124,7 +124,7 @@ if (isset($_POST['frm_action']) || isset($_POST['item_meta'])) {
     ];
     @file_put_contents($log_dir . '/contacts.log', json_encode($entry) . "\n", FILE_APPEND);
     
-    $to = defined('HOSPITAL_EMAIL') ? HOSPITAL_EMAIL : 'hospitalvcaremultispeciality@gmail.com';
+    $to = defined('HOSPITAL_EMAIL') ? HOSPITAL_EMAIL : 'rb887087@gmail.com';
     $firstName = $_POST['item_meta'][1] ?? '';
     $lastName = $_POST['item_meta'][2] ?? '';
     $senderName = trim("$firstName $lastName") ?: 'Website Visitor';
