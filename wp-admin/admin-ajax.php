@@ -85,7 +85,8 @@ if (!is_dir($log_dir)) {
 
 $action = $_POST['action'] ?? $_GET['action'] ?? '';
 
-if ($action === 'wpr_form_submission' || isset($_POST['form_fields'])) {
+// 1. Appointment Form (Royal Elementor Addons or custom)
+if ($action === 'wpr_form_builder_email' || $action === 'wpr_form_submission' || isset($_POST['form_fields']) || isset($_POST['form_content'])) {
     $entry = [
         'timestamp' => date('Y-m-d H:i:s'),
         'type' => 'Appointment',
@@ -95,9 +96,29 @@ if ($action === 'wpr_form_submission' || isset($_POST['form_fields'])) {
     
     $to = defined('HOSPITAL_EMAIL') ? HOSPITAL_EMAIL : 'rb887087@gmail.com';
     $subject = 'New Appointment Request - V Care Hospital';
-    $date = $_POST['date'] ?? $_POST['form_fields']['f7bddbf'] ?? 'N/A';
-    $time = $_POST['time'] ?? $_POST['form_fields']['name'] ?? 'N/A';
-    $patient = $_POST['message'] ?? $_POST['form_fields']['message'] ?? 'N/A';
+    $date = $_POST['date'] ?? $_POST['form_fields']['f7bddbf'] ?? '';
+    $time = $_POST['time'] ?? $_POST['form_fields']['name'] ?? '';
+    $patient = $_POST['message'] ?? $_POST['form_fields']['message'] ?? '';
+
+    // If sent via Royal Elementor form_content
+    if (isset($_POST['form_content']) && is_array($_POST['form_content'])) {
+        foreach ($_POST['form_content'] as $k => $f) {
+            if (!is_array($f)) continue;
+            $ftype = $f[0] ?? '';
+            $fval = $f[1] ?? '';
+            if ($ftype === 'date' || strpos($k, 'f7bddbf') !== false) {
+                if (!$date) $date = $fval;
+            } elseif ($ftype === 'time' || strpos($k, 'name') !== false) {
+                if (!$time) $time = $fval;
+            } elseif ($ftype === 'textarea' || strpos($k, 'message') !== false) {
+                if (!$patient) $patient = $fval;
+            }
+        }
+    }
+    
+    if (!$date) $date = 'Not specified';
+    if (!$time) $time = 'Not specified';
+    if (!$patient) $patient = 'Not specified';
     
     $email_body = "New Appointment Request Received!\n\n"
         . "Date: $date\n"
@@ -107,16 +128,24 @@ if ($action === 'wpr_form_submission' || isset($_POST['form_fields'])) {
         
     $smtp_sent = send_gmail_smtp($to, $subject, $email_body);
     
+    $msg = 'Thank you! Your appointment request has been submitted successfully to V Care Multispeciality Hospital. Our reception desk will contact you shortly.';
+    
     echo json_encode([
+        'success' => true,
         'status' => 'success',
         'smtp_sent' => $smtp_sent,
-        'message' => 'Appointment request received successfully.',
-        'data' => $entry
+        'message' => $msg,
+        'data' => [
+            'action' => 'wpr_form_builder_email',
+            'status' => 'success',
+            'message' => $msg
+        ]
     ]);
     exit;
 }
 
-if (isset($_POST['frm_action']) || isset($_POST['item_meta'])) {
+// 2. Contact Form (Formidable Forms)
+if ($action === 'frm_entries_create' || isset($_POST['frm_action']) || isset($_POST['item_meta'])) {
     $entry = [
         'timestamp' => date('Y-m-d H:i:s'),
         'type' => 'Contact Inquiry',
@@ -141,10 +170,15 @@ if (isset($_POST['frm_action']) || isset($_POST['item_meta'])) {
         
     $smtp_sent = send_gmail_smtp($to, "Contact Form: $subject", $email_body, $senderEmail);
     
+    $success_html = '<div class="frm_message frm_success_style" role="status"><p><strong>Thank you!</strong> Your message has been sent successfully to V Care Multispeciality Hospital desk. We will respond promptly.</p></div>';
+    
     echo json_encode([
+        'success' => true,
         'status' => 'success',
         'smtp_sent' => $smtp_sent,
         'message' => 'Contact message received successfully.',
+        'content' => $success_html,
+        'errors' => new stdClass(),
         'data' => $entry
     ]);
     exit;
