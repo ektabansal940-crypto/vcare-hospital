@@ -19,3 +19,6 @@ $RECYCLE.BIN/
 # Sensitive SMTP credentials
 *smtp-config.php
 
+# Accidental nested repo clone
+/V Care Multispeciality Hospital/
+

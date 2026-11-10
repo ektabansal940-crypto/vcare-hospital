@@ -6,6 +6,101 @@
 
 /**
  * ============================================================================
+ * UNIVERSAL EXTENSIONLESS URL CLEANER & LINK NORMALIZER
+ * ============================================================================
+ * 1. Instantly removes .html extensions from the browser address bar.
+ * 2. If a user visits /xyz.html directly, smoothly cleans or redirects to /xyz/.
+ * 3. Sanitizes all internal links on the page so users never see or navigate to .html.
+ */
+(function initExtensionlessUrls() {
+    function cleanCurrentUrl() {
+        try {
+            var loc = window.location;
+            var host = loc.hostname;
+            var path = loc.pathname;
+
+            // Direct canonical 301-equivalent redirect for www -> non-www
+            if (host === 'www.vcaremultispecialityhospital.in') {
+                var clean = path.replace(/\/index\.html$/i, '/').replace(/\.html$/i, '/');
+                loc.replace('https://vcaremultispecialityhospital.in' + clean + loc.search + loc.hash);
+                return;
+            }
+
+            if (path && /\.html$/i.test(path)) {
+                var cleanPath;
+                if (/\/index\.html$/i.test(path)) {
+                    if (host === 'vcaremultispecialityhospital.in' && loc.protocol !== 'file:') {
+                        loc.replace('https://vcaremultispecialityhospital.in/' + loc.search + loc.hash);
+                        return;
+                    }
+                    cleanPath = path.replace(/\/index\.html$/i, '/');
+                    if (window.history && window.history.replaceState) {
+                        window.history.replaceState(null, '', cleanPath + loc.search + loc.hash);
+                    }
+                } else {
+                    cleanPath = path.replace(/\.html$/i, '/');
+                    if (loc.protocol !== 'file:') {
+                        loc.replace(cleanPath + loc.search + loc.hash);
+                    } else if (window.history && window.history.replaceState) {
+                        window.history.replaceState(null, '', cleanPath + loc.search + loc.hash);
+                    }
+                }
+            }
+        } catch (e) {}
+    }
+
+    cleanCurrentUrl();
+
+    function normalizeUrlString(href) {
+        if (!href) return href;
+        if (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('tel:') || 
+            href.startsWith('mailto:') || href.startsWith('javascript:') || href.startsWith('#')) {
+            return href;
+        }
+        if (href.indexOf('.html') !== -1) {
+            var cleanHref = href
+                .replace(/(^|\/)index\.html$/, '$1')
+                .replace(/\.html$/, '/');
+            if (cleanHref === '') cleanHref = './';
+            return cleanHref;
+        }
+        return href;
+    }
+
+    function sanitizeAllAnchors() {
+        document.querySelectorAll('a[href]').forEach(function(a) {
+            var href = a.getAttribute('href');
+            if (href && href.indexOf('.html') !== -1) {
+                var cleaned = normalizeUrlString(href);
+                if (cleaned !== href) {
+                    a.setAttribute('href', cleaned);
+                }
+            }
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', sanitizeAllAnchors);
+    } else {
+        sanitizeAllAnchors();
+    }
+
+    // Intercept clicks on links that may have been generated dynamically
+    document.addEventListener('click', function(e) {
+        var a = e.target.closest('a');
+        if (!a) return;
+        var href = a.getAttribute('href');
+        if (href && href.indexOf('.html') !== -1) {
+            var cleaned = normalizeUrlString(href);
+            if (cleaned !== href) {
+                a.setAttribute('href', cleaned);
+            }
+        }
+    }, true);
+})();
+
+/**
+ * ============================================================================
  * UNIVERSAL FORM SECURITY & SMTP DISPATCH BRIDGE
  * ============================================================================
  * 1. Blocks any native HTTP POST to .html files, permanently eliminating 405 Not Allowed.
@@ -38,14 +133,22 @@
     window.getHospitalAjaxUrl = function() {
         var loc = window.location;
         if (loc.hostname === 'localhost' || loc.hostname === '127.0.0.1') {
-            var path = loc.pathname;
+            var raw = loc.pathname;
+            var decoded = decodeURIComponent(raw);
             var marker = '/V Care Multispeciality Hospital/';
-            var idx = path.indexOf(marker);
+            var idx = decoded.indexOf(marker);
             if (idx !== -1) {
-                return loc.origin + path.substring(0, idx + marker.length) + 'wp-admin/admin-ajax.php';
+                var rawIdx = raw.toLowerCase().indexOf('/v%20care%20multispeciality%20hospital/');
+                if (rawIdx !== -1) {
+                    return loc.origin + raw.substring(0, rawIdx + '/v%20care%20multispeciality%20hospital/'.length) + 'wp-admin/admin-ajax.php';
+                }
+                return loc.origin + raw.substring(0, idx + marker.length) + 'wp-admin/admin-ajax.php';
             }
-            var isSubdir = path.includes('/appointment/') || path.includes('/contact/');
+            var isSubdir = decoded.includes('/appointment/') || decoded.includes('/contact/');
             return (isSubdir ? '../' : '') + 'wp-admin/admin-ajax.php';
+        }
+        if (loc.origin && loc.origin !== 'null') {
+            return loc.origin + '/wp-admin/admin-ajax.php';
         }
         var isSubdir = loc.pathname.includes('/appointment/') || loc.pathname.includes('/contact/');
         return (isSubdir ? '../' : '') + 'wp-admin/admin-ajax.php';

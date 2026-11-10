@@ -3,13 +3,51 @@ DirectoryIndex index.html index.php
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /V%20Care%20Multispeciality%20Hospital/
 
-    # Handle clean URLs without .html
+    # =========================================================================
+    # 1. PERMANENT 301 REDIRECTS (CANONICAL HOMEPAGE & DOMAIN NORMALIZATION)
+    # Canonical Homepage: https://vcaremultispecialityhospital.in/
+    # =========================================================================
+
+    # Rule 1A: Direct 301 for www with index.html -> https://vcaremultispecialityhospital.in/
+    # Resolves directly to canonical homepage without redirect chains
+    RewriteCond %{HTTP_HOST} ^www\.vcaremultispecialityhospital\.in$ [NC]
+    RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s/+index\.html[?\s] [NC]
+    RewriteRule ^(.*)$ https://vcaremultispecialityhospital.in/ [R=301,L,QSA]
+
+    # Rule 1B: Direct 301 for non-www index.html -> https://vcaremultispecialityhospital.in/
+    # Resolves directly to canonical homepage without redirect chains
+    RewriteCond %{HTTP_HOST} ^vcaremultispecialityhospital\.in$ [NC]
+    RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s/+index\.html[?\s] [NC]
+    RewriteRule ^(.*)$ https://vcaremultispecialityhospital.in/ [R=301,L,QSA]
+
+    # Rule 1C: Direct 301 for any other request on www -> non-www https://vcaremultispecialityhospital.in/...
+    RewriteCond %{HTTP_HOST} ^www\.vcaremultispecialityhospital\.in$ [NC]
+    RewriteRule ^(.*)$ https://vcaremultispecialityhospital.in/$1 [R=301,L,QSA]
+
+    # Rule 1D: Enforce HTTPS for non-www live domain
+    RewriteCond %{HTTP_HOST} ^vcaremultispecialityhospital\.in$ [NC]
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://vcaremultispecialityhospital.in/$1 [R=301,L,QSA]
+
+    # =========================================================================
+    # 2. EXTENSIONLESS URL ROUTING & CLEAN DIRECTORY REDIRECTS
+    # =========================================================================
+
+    # Clean /index.html for local development / other hosts (e.g. localhost)
+    RewriteCond %{HTTP_HOST} !vcaremultispecialityhospital\.in$ [NC]
+    RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s(.*)/index\.html[?\s] [NC]
+    RewriteRule ^ %1/ [R=301,L,QSA]
+
+    # 301 Redirect direct requests for page.html to clean directory page/
+    RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s(.*)/([^/]+)\.html[?\s] [NC]
+    RewriteRule ^ %1/%2/ [R=301,L,QSA]
+
+    # Serve corresponding .html file if clean URL requested and no folder exists
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME}.html -f
-    RewriteRule ^(.*)$ $1.html [L]
+    RewriteRule ^(.*)$ $1.html [L,QSA]
 </IfModule>
 
 # MIME Types for Web Fonts and modern formats
