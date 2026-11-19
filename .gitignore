@@ -21,4 +21,6 @@ $RECYCLE.BIN/
 
 # Accidental nested repo clone
 /V Care Multispeciality Hospital/
+V Care Multispeciality Hospital copy/
+*.zip
 

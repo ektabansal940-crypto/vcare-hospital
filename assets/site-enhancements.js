@@ -38,11 +38,9 @@
                         window.history.replaceState(null, '', cleanPath + loc.search + loc.hash);
                     }
                 } else {
-                    cleanPath = path.replace(/\.html$/i, '/');
-                    if (loc.protocol !== 'file:') {
+                    if (loc.protocol !== 'file:' && host === 'vcaremultispecialityhospital.in') {
+                        cleanPath = path.replace(/\.html$/i, '/');
                         loc.replace(cleanPath + loc.search + loc.hash);
-                    } else if (window.history && window.history.replaceState) {
-                        window.history.replaceState(null, '', cleanPath + loc.search + loc.hash);
                     }
                 }
             }
@@ -55,6 +53,9 @@
         if (!href) return href;
         if (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('tel:') || 
             href.startsWith('mailto:') || href.startsWith('javascript:') || href.startsWith('#')) {
+            return href;
+        }
+        if (window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
             return href;
         }
         if (href.indexOf('.html') !== -1) {
