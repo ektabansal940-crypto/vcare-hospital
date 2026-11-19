@@ -14,6 +14,32 @@
 
 
 /* =============================================================
+   BLOG ARTICLE BREADCRUMB TEXT & LINK COLOR FIX
+   Ensures the entire breadcrumb (Home, Blog, current blog title,
+   separators, and links) is clean white (#FFFFFF) across all devices.
+   ============================================================= */
+.elementor-element.elementor-element-1978df7,
+.elementor-element.elementor-element-1978df7 a,
+.elementor-element.elementor-element-1978df7 span,
+.elementor-element.elementor-element-1978df7 .elementor-heading-title,
+.elementor-element.elementor-element-1978df7 h2 {
+  color: #FFFFFF !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+}
+
+.elementor-element.elementor-element-1978df7 a:hover,
+.elementor-element.elementor-element-1978df7 a:focus {
+  color: #FFFFFF !important;
+  text-decoration: underline !important;
+}
+
+.elementor-element.elementor-element-1978df7 a:visited,
+.elementor-element.elementor-element-1978df7 a:active {
+  color: #FFFFFF !important;
+}
+
+
+/* =============================================================
    MOBILE-ONLY OPTIMIZATIONS (@media max-width: 767px)
    Strictly applies only on mobile screens.
    Desktop and tablet views are 100% untouched.
