@@ -29,11 +29,11 @@
             if (path && /\.html$/i.test(path)) {
                 var cleanPath;
                 if (/\/index\.html$/i.test(path)) {
+                    cleanPath = path.replace(/\/index\.html$/i, '/');
                     if (host === 'vcaremultispecialityhospital.in' && loc.protocol !== 'file:') {
-                        loc.replace('https://vcaremultispecialityhospital.in/' + loc.search + loc.hash);
+                        loc.replace('https://vcaremultispecialityhospital.in' + cleanPath + loc.search + loc.hash);
                         return;
                     }
-                    cleanPath = path.replace(/\/index\.html$/i, '/');
                     if (window.history && window.history.replaceState) {
                         window.history.replaceState(null, '', cleanPath + loc.search + loc.hash);
                     }
@@ -290,11 +290,13 @@ document.addEventListener('DOMContentLoaded', function() {
     initCounters();
     initSmoothScroll();
     initBreadcrumbColorFix();
+    initBlogNavFix();
 });
 
-// Enforce breadcrumb colors immediately as script loads
+// Enforce breadcrumb colors and blog navigation immediately as script loads
 if (document.readyState !== 'loading') {
     initBreadcrumbColorFix();
+    initBlogNavFix();
 }
 
 // 1. Mobile Navigation Toggle
@@ -764,5 +766,29 @@ function initBreadcrumbColorFix() {
             el.style.setProperty('color', '#FFFFFF', 'important');
             el.style.setProperty('-webkit-text-fill-color', '#FFFFFF', 'important');
         });
+    });
+}
+
+// 8. Blog Navbar Navigation Normalizer & Enforcer
+function initBlogNavFix() {
+    document.querySelectorAll('a.wpr-menu-item, a.wpr-mobile-menu-item').forEach(function(a) {
+        if (a.textContent.trim().toLowerCase() === 'blog') {
+            var href = a.getAttribute('href');
+            if (href) {
+                // If href is a directory link, upgrade to explicit HTML file
+                if (href === 'blog/' || href === './blog/') {
+                    a.setAttribute('href', 'blog/index.html');
+                } else if (href === '../blog/') {
+                    var path = window.location.pathname.replace(/\\/g, '/');
+                    if (/\/blog\/[^/]*\.html$/i.test(path) || /\/blog\/$/i.test(path)) {
+                        a.setAttribute('href', 'index.html');
+                    } else {
+                        a.setAttribute('href', '../blog/index.html');
+                    }
+                } else if (href === '../../blog/') {
+                    a.setAttribute('href', '../index.html');
+                }
+            }
+        }
     });
 }
