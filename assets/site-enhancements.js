@@ -289,7 +289,13 @@ document.addEventListener('DOMContentLoaded', function() {
     initAccordions();
     initCounters();
     initSmoothScroll();
+    initBreadcrumbColorFix();
 });
+
+// Enforce breadcrumb colors immediately as script loads
+if (document.readyState !== 'loading') {
+    initBreadcrumbColorFix();
+}
 
 // 1. Mobile Navigation Toggle
 function initMobileNav() {
@@ -744,6 +750,19 @@ function initSmoothScroll() {
                     target.scrollIntoView({ behavior: 'smooth' });
                 }
             }
+        });
+    });
+}
+
+// 7. Breadcrumb Pure White Color Enforcer
+function initBreadcrumbColorFix() {
+    const breadcrumbWrappers = document.querySelectorAll('.elementor-element-1978df7');
+    breadcrumbWrappers.forEach(function(wrapper) {
+        wrapper.style.setProperty('color', '#FFFFFF', 'important');
+        const allDescendants = wrapper.querySelectorAll('*');
+        allDescendants.forEach(function(el) {
+            el.style.setProperty('color', '#FFFFFF', 'important');
+            el.style.setProperty('-webkit-text-fill-color', '#FFFFFF', 'important');
         });
     });
 }
