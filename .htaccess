@@ -1,49 +1,48 @@
-# Apache Configuration for V Care Multispeciality Hospital
+# Apache & LiteSpeed Configuration for V Care Multispeciality Hospital
 DirectoryIndex index.html index.php
+
+<IfModule mod_negotiation.c>
+    Options -MultiViews
+</IfModule>
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
+    RewriteBase /
 
     # =========================================================================
-    # 1. PERMANENT 301 REDIRECTS (CANONICAL HOMEPAGE & DOMAIN NORMALIZATION)
-    # Canonical Homepage: https://vcaremultispecialityhospital.in/
+    # 1. CANONICAL DOMAIN & HTTPS NORMALIZATION
     # =========================================================================
+    # Strip www to non-www for any domain
+    RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+    RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
 
-    # Rule 1A: Direct 301 for www with index.html -> https://vcaremultispecialityhospital.in/
-    # Resolves directly to canonical homepage without redirect chains
-    RewriteCond %{HTTP_HOST} ^www\.vcaremultispecialityhospital\.in$ [NC]
-    RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s/+index\.html[?\s] [NC]
-    RewriteRule ^(.*)$ https://vcaremultispecialityhospital.in/ [R=301,L,QSA]
-
-    # Rule 1B: Direct 301 for non-www index.html -> https://vcaremultispecialityhospital.in/
-    # Resolves directly to canonical homepage without redirect chains
-    RewriteCond %{HTTP_HOST} ^vcaremultispecialityhospital\.in$ [NC]
-    RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s/+index\.html[?\s] [NC]
-    RewriteRule ^(.*)$ https://vcaremultispecialityhospital.in/ [R=301,L,QSA]
-
-    # Rule 1C: Direct 301 for any other request on www -> non-www https://vcaremultispecialityhospital.in/...
-    RewriteCond %{HTTP_HOST} ^www\.vcaremultispecialityhospital\.in$ [NC]
-    RewriteRule ^(.*)$ https://vcaremultispecialityhospital.in/$1 [R=301,L,QSA]
-
-    # Rule 1D: Enforce HTTPS for non-www live domain
-    RewriteCond %{HTTP_HOST} ^vcaremultispecialityhospital\.in$ [NC]
+    # Enforce HTTPS (compatible with Hostinger reverse proxy and SSL termination)
     RewriteCond %{HTTPS} off
-    RewriteRule ^(.*)$ https://vcaremultispecialityhospital.in/$1 [R=301,L,QSA]
+    RewriteCond %{HTTP:X-Forwarded-Proto} !https
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
 
     # =========================================================================
     # 2. EXTENSIONLESS URL ROUTING & CLEAN DIRECTORY REDIRECTS
     # =========================================================================
+    # Remove index.html from root request: /index.html -> /
+    RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s/+index\.html[?\s] [NC]
+    RewriteRule ^index\.html$ / [R=301,L]
 
-    # Clean /index.html for local development / other hosts (e.g. localhost)
-    RewriteCond %{HTTP_HOST} !vcaremultispecialityhospital\.in$ [NC]
-    RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s(.*)/index\.html[?\s] [NC]
-    RewriteRule ^ %1/ [R=301,L,QSA]
+    # Remove index.html from any subdirectory request: /dir/index.html -> /dir/
+    # (e.g. /blog/index.html -> /blog/ without ever redirecting to /blog/index/)
+    RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s/+(.*?)/+index\.html[?\s] [NC]
+    RewriteRule ^(.+?)/index\.html$ /$1/ [R=301,L]
 
     # 301 Redirect direct requests for page.html to clean directory page/
-    RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s(.*)/([^/]+)\.html[?\s] [NC]
-    RewriteRule ^ %1/%2/ [R=301,L,QSA]
+    # Strictly exclude index.html to prevent any /index/ directory redirects
+    RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s/+(.*?)/?([^/]+)\.html[?\s] [NC]
+    RewriteCond %2 !^index$ [NC]
+    RewriteRule ^(.*?)/?([^/]+)\.html$ /$1/$2/ [R=301,L]
 
-    # Serve corresponding .html file if clean URL requested and no folder exists
+    # =========================================================================
+    # 3. INTERNAL REWRITE TO SERVE .HTML FILES FOR CLEAN URLS
+    # =========================================================================
+    # If clean URL is requested and matching .html exists, serve it internally
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME}.html -f
