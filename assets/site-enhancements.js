@@ -23,8 +23,16 @@
 
             // Direct canonical redirect for www -> non-www
             if (host.startsWith('www.')) {
-                var clean = path.replace(/\/index\.html$/i, '/').replace(/\.html$/i, '/');
+                var clean = path.replace(/\/index(?:\/|\.html)?$/i, '/').replace(/\.html$/i, '/');
                 loc.replace(loc.protocol + '//' + host.substring(4) + clean + loc.search + loc.hash);
+                return;
+            }
+
+            // Clean any trailing /index or /index/ or /index.html directly to parent directory
+            if (/\/index(?:\/|\.html)?$/i.test(path)) {
+                var cleanPath = path.replace(/\/index(?:\/|\.html)?$/i, '/');
+                if (!cleanPath) cleanPath = '/';
+                loc.replace(cleanPath + loc.search + loc.hash);
                 return;
             }
 
@@ -55,6 +63,10 @@
         }
         if (window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
             return href;
+        }
+        if (/\/index(?:\/|\.html)?$/i.test(href)) {
+            href = href.replace(/\/index(?:\/|\.html)?$/i, '/');
+            if (!href) href = '/';
         }
         if (href.indexOf('.html') !== -1) {
             var cleanHref = href

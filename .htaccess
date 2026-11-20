@@ -10,6 +10,19 @@ DirectoryIndex index.html index.php
     RewriteBase /
 
     # =========================================================================
+    # 0. CANONICAL CLEAN REDIRECTS FOR ANY /index/ OR /index PATHS
+    # =========================================================================
+    # Rule 0A: If /blog/index or /blog/index/ or /sub/index/ is requested in the browser,
+    # immediately 301 redirect to /sub/ (e.g. /blog/index/ -> /blog/)
+    RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s/+(.+?)/+index/?(?:\.html)?[\s?] [NC]
+    RewriteRule ^ /%1/ [R=301,L]
+
+    # Rule 0B: If /index or /index/ or /index.html is requested at root,
+    # immediately 301 redirect to /
+    RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s/+index/?(?:\.html)?[\s?] [NC]
+    RewriteRule ^ / [R=301,L]
+
+    # =========================================================================
     # 1. CANONICAL DOMAIN & HTTPS NORMALIZATION
     # =========================================================================
     # Strip www to non-www for any domain
@@ -24,17 +37,8 @@ DirectoryIndex index.html index.php
     # =========================================================================
     # 2. EXTENSIONLESS URL ROUTING & CLEAN DIRECTORY REDIRECTS
     # =========================================================================
-    # Remove index.html from root request: /index.html -> /
-    RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s/+index\.html[?\s] [NC]
-    RewriteRule ^index\.html$ / [R=301,L]
-
-    # Remove index.html from any subdirectory request: /dir/index.html -> /dir/
-    # (e.g. /blog/index.html -> /blog/ without ever redirecting to /blog/index/)
-    RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s/+(.*?)/+index\.html[?\s] [NC]
-    RewriteRule ^(.+?)/index\.html$ /$1/ [R=301,L]
-
     # 301 Redirect direct requests for page.html to clean directory page/
-    # Strictly exclude index.html to prevent any /index/ directory redirects
+    # Strictly exclude index.html (already handled by Rule 0A and 0B)
     RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s/+(.*?)/?([^/]+)\.html[?\s] [NC]
     RewriteCond %2 !^index$ [NC]
     RewriteRule ^(.*?)/?([^/]+)\.html$ /$1/$2/ [R=301,L]
@@ -43,6 +47,8 @@ DirectoryIndex index.html index.php
     # 3. INTERNAL REWRITE TO SERVE .HTML FILES FOR CLEAN URLS
     # =========================================================================
     # If clean URL is requested and matching .html exists, serve it internally
+    # Exclude any index requests to prevent internal redirect loops
+    RewriteCond %{REQUEST_URI} !index [NC]
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME}.html -f
